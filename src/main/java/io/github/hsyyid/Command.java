@@ -50,7 +50,7 @@ public class Command implements CommandCallable {
 	}
 
 	public Text getUsage(CommandSource arg0) {
-		return ((Text) Texts.of("Use /rebooter reload to reload the config."));
+		return ((Text) Texts.of("Use /kit <name> to spawn a kit!"));
 	}
 	
 	public Optional<CommandResult> process(CommandSource src, String arguments)
