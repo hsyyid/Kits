@@ -3,6 +3,8 @@ package io.github.hsyyid;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -30,7 +32,9 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 import org.spongepowered.api.util.command.CommandCallable;
 import org.spongepowered.api.util.command.CommandSource;
+import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.dispatcher.SimpleDispatcher;
+import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import com.google.inject.Inject;
 
@@ -42,6 +46,7 @@ public class Main {
 	static List<String> allKits = new ArrayList<String>();
 	//Setting up Plugin Logger.
 	static ConfigurationNode config = null;
+
 	static Game game;
 	@Inject
 	private Logger logger;
@@ -49,7 +54,6 @@ public class Main {
 	public Logger getLogger() {
 	    return logger;
 	}
-	
 	@Inject
 	@DefaultConfig(sharedRoot = true)
 	private File defaultConfig;
@@ -57,7 +61,7 @@ public class Main {
 	@Inject
 	@DefaultConfig(sharedRoot = true)
 	private ConfigurationLoader<CommentedConfigurationNode> configManager;
-	
+
 	@Subscribe
     public void onServerStart(ServerStartedEvent event) {
 		getLogger().info("Kits loaded!");
@@ -72,7 +76,6 @@ public class Main {
 		     if (!defaultConfig.exists()) {
 		        defaultConfig.createNewFile();
 		        config = configManager.load();
-		        
 		        config.getNode("kits", "kits").setValue("default");
 		        config.getNode("kits", "default", "item").setValue("diamond_axe");
 		        configManager.save(config);
@@ -136,9 +139,31 @@ public class Main {
 		
 		}
 		
+		//Sub Commands
+		HashMap<List<String>, CommandSpec> subcommands = new HashMap();
+
+		// /kit add
+		subcommands.put(Arrays.asList("add"), CommandSpec.builder()
+		        .setPermission("kits.add")
+		        .setDescription(Texts.of("Add a Kit or Item to a Kit"))
+		        .setArguments(GenericArguments.seq(
+		        		GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
+		                GenericArguments.onlyOne(GenericArguments.string(Texts.of("item")))))
+		        .setExecutor(new KitAddExecutor())
+		        .build());
+		
 		//Register /kit Command
+		CommandSpec myCommandSpec = CommandSpec.builder()
+			    .setDescription(Texts.of("Kits Command"))
+			    .setPermission("kits.use")
+			    .setExecutor(new KitExecutor())
+			    .setArguments(GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Texts.of("kit name"))))
+			    .setChildren(subcommands)
+			    .build();
+
+			game.getCommandDispatcher().register(this, myCommandSpec, "kit");
+			
         CommandService cmdService = event.getGame().getCommandDispatcher();
-        cmdService.register(this, new Command(server), "kit");
         cmdService.register(this, new ListCommand(server), "kits");
 	}
 	public static String getItems(String kitName){
@@ -148,7 +173,7 @@ public class Main {
 			return items;
 		}
 		else{
-			System.out.println("[KIT]: " + kitName + " does not exist!");
+			System.out.println("[KITS]: " + kitName + " does not exist!");
 			return null;
 		}
 	}
