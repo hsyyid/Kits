@@ -32,6 +32,7 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 import org.spongepowered.api.util.command.CommandCallable;
 import org.spongepowered.api.util.command.CommandSource;
+import org.spongepowered.api.util.command.args.ChildCommandElementExecutor;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.dispatcher.SimpleDispatcher;
 import org.spongepowered.api.util.command.spec.CommandSpec;
@@ -46,6 +47,7 @@ public class Main {
 	static List<String> allKits = new ArrayList<String>();
 	//Setting up Plugin Logger.
 	static ConfigurationNode config = null;
+	static ConfigurationLoader<CommentedConfigurationNode> configurationManager;
 
 	static Game game;
 	@Inject
@@ -61,7 +63,7 @@ public class Main {
 	@Inject
 	@DefaultConfig(sharedRoot = true)
 	private ConfigurationLoader<CommentedConfigurationNode> configManager;
-
+	
 	@Subscribe
     public void onServerStart(ServerStartedEvent event) {
 		getLogger().info("Kits loaded!");
@@ -76,10 +78,11 @@ public class Main {
 		     if (!defaultConfig.exists()) {
 		        defaultConfig.createNewFile();
 		        config = configManager.load();
-		        config.getNode("kits", "kits").setValue("default");
-		        config.getNode("kits", "default", "item").setValue("diamond_axe");
+		        config.getNode("kits", "kits").setValue("default,");
+		        config.getNode("kits", "default", "item").setValue("diamond_axe,");
 		        configManager.save(config);
 		    }
+		    configurationManager = configManager;
 		    config = configManager.load();
 
 		} catch (IOException exception) {
@@ -130,7 +133,7 @@ public class Main {
 			{
 				config.getNode("kits", k, "item").setValue("diamond_axe");
 				try {
-				configManager.save(config);
+					configManager.save(config);
 				} catch (IOException e) {
 					getLogger().error("The default configuration could not be loaded or created!");
 				}
@@ -138,7 +141,6 @@ public class Main {
 		size = currentSize;
 		
 		}
-		
 		//Sub Commands
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap();
 
@@ -157,7 +159,7 @@ public class Main {
 			    .setDescription(Texts.of("Kits Command"))
 			    .setPermission("kits.use")
 			    .setExecutor(new KitExecutor())
-			    .setArguments(GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Texts.of("kit name"))))
+			    .setArguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))))
 			    .setChildren(subcommands)
 			    .build();
 
@@ -165,6 +167,9 @@ public class Main {
 			
         CommandService cmdService = event.getGame().getCommandDispatcher();
         cmdService.register(this, new ListCommand(server), "kits");
+	}
+	public static ConfigurationLoader<CommentedConfigurationNode> getConfigManager(){
+		return configurationManager;
 	}
 	public static String getItems(String kitName){
 		ConfigurationNode valueNode = config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));

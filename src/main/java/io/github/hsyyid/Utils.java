@@ -13,43 +13,35 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 public class Utils {
-	@Inject
-	@DefaultConfig(sharedRoot = true)
-	private File defaultConfig;
-	
-	@Inject
-	@DefaultConfig(sharedRoot = true)
-	private static ConfigurationLoader<CommentedConfigurationNode> configManager;
-	
+
 	public static void addItem(String kitName, String item){
-		ConfigurationNode rootNode = configManager.createEmptyNode(ConfigurationOptions.defaults());
-		ConfigurationNode valueNode = rootNode.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
 		String items = valueNode.getString();
 		String formattedItem = (item + ",");
 		valueNode.setValue(items + formattedItem);
 		try {
-			configManager.save(rootNode);
+			configManager.save(Main.config);
 		} catch(IOException e) {
 		    System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}
 	}
 	
 	public static void addKit(String kitName, String item){
-		ConfigurationNode rootNode = configManager.createEmptyNode(ConfigurationOptions.defaults());
-		ConfigurationNode kitNode = rootNode.getNode((Object[]) ("kits.kits").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		ConfigurationNode kitNode = Main.config.getNode((Object[]) ("kits.kits").split("\\."));
 		String kits = kitNode.getString();
 		String formattedKitName = (kitName + ",");
 		kitNode.setValue(kits + formattedKitName);
 		try {
-			configManager.save(rootNode);
+			configManager.save(Main.config);
 		} catch(IOException e) {
 		    System.out.println("[KITS]: Failed to add kit " + kitName);
 		}
-		ConfigurationNode valueNode = configManager.createEmptyNode(ConfigurationOptions.defaults());
-		ConfigurationNode itemNode = valueNode.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
-		itemNode.setValue(item + ",");
+		ConfigurationNode itemNode = Main.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
+		itemNode.setValue(item);
 		try {
-			configManager.save(valueNode);
+			configManager.save(Main.config);
 		} catch(IOException e) {
 			System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}
