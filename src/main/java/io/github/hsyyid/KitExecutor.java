@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
@@ -68,9 +69,9 @@ public class KitExecutor implements CommandExecutor {
     		}
     		
     	}
-    	else{
-    		src.sendMessage(Texts.of("PLEASE SPECIFY A KIT NAME! /kit <name>"));
-    	}
+		else{
+			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "Format: /kit <kit name>"));
+		}
         return CommandResult.success();
     }
 }

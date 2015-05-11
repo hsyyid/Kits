@@ -35,11 +35,15 @@ public class ListCommand implements CommandCallable{
 	public Optional<CommandResult> process(CommandSource src,
 			String arguments) throws CommandException {
 				int pgNo = 1;
-				if(arguments != null){
-					pgNo = Integer.parseInt(arguments);
+				if(arguments.length() == 0){
+					pgNo = 1;
 				}
 				else{
-					pgNo = 1;
+					try{
+						pgNo = Integer.parseInt(arguments);
+					}catch(NumberFormatException e){
+						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "Format: /kits <page number>"));
+					}
 				}
 				//Add List
 				PaginatedList pList = new PaginatedList("/kits");
@@ -62,17 +66,7 @@ public class ListCommand implements CommandCallable{
 
 				pList.setHeader(header.build());
 				//Send List
-				if(src instanceof Player) {
-					Player player = (Player) src;
-					player.sendMessage(pList.getPage(pgNo));
-				}
-				else if(src instanceof ConsoleSource) {
-				    src.sendMessage(Texts.of("Must be an in-game player to use /kits!"));
-				}
-				else if(src instanceof CommandBlockSource) {
-				    src.sendMessage(Texts.of("Must be an in-game player to use /kits!"));
-				}
-				
+				src.sendMessage(pList.getPage(pgNo));		
 				return Optional.of(CommandResult.success());
 	}
 

@@ -1,6 +1,7 @@
 package io.github.hsyyid;
 
 import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
@@ -11,7 +12,7 @@ public class KitAddExecutor implements CommandExecutor {
 	
 	public CommandResult execute(CommandSource src, CommandContext args)
 			throws CommandException {
-		if(args != null){
+		System.out.println("Well we know it's still goin in here.");
 		String name = args.<String>getOne("kit name").get();
 		String item = args.<String>getOne("item").get();
 		String items = Main.getItems(name);
@@ -20,10 +21,6 @@ public class KitAddExecutor implements CommandExecutor {
 		}
 		else{
 			Utils.addKit(name, item);
-		}
-		}
-		else{
-			src.sendMessage(Texts.of("To use /kit add please do /kit add <kit name> <item id>"));
 		}
 		return CommandResult.success();
 	}
