@@ -152,6 +152,7 @@ public class Main {
 		        		GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
 		                GenericArguments.onlyOne(GenericArguments.string(Texts.of("item")))))
 		        .setExecutor(new KitAddExecutor())
+		        .setExtendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
 		        .build());
 		
 		//Register /kit Command
