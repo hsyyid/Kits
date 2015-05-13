@@ -108,22 +108,6 @@ For example, if you wanted to give permission to use kit default, the permission
 
 kits.use.default
 
-## Clone
-The following steps will ensure your project is cloned properly.  
-1. `git clone git@github.com:SpongePowered/SpongeAPI.git`  
-2. `cd SpongeAPI`  
-3. `cp scripts/pre-commit .git/hooks`
-
-## Building
-__Note:__ If you do not have [Gradle] installed then use ./gradlew for Unix systems or Git Bash and gradlew.bat for Windows systems in place of any 'gradle' command.
-
-In order to build SpongeAPI you simply need to run the `gradle` command. You can find the compiled JAR file in `./build/libs` labeled similarly to 'spongeapi-x.x.x-SNAPSHOT.jar'.
-
-## Contributing
-Are you a talented programmer looking to contribute some code? We'd love the help!
-* Open a pull request with your changes, following our [guidelines](CONTRIBUTING.md).
-* Please follow the above guidelines and requirements for your pull request(s) to be accepted.
-
 [Developer Website]: http://negafinity.com
 [Issues]: https://github.com/hsyyid/Kits/issues
 [Sponge Website Posting]: https://forums.spongepowered.org/t/kits-v0-1/7099
