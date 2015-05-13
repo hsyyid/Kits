@@ -22,6 +22,7 @@ public class Utils {
 		valueNode.setValue(items + formattedItem);
 		try {
 			configManager.save(Main.config);
+			configManager.load();
 		} catch(IOException e) {
 		    System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}
@@ -35,6 +36,7 @@ public class Utils {
 		kitNode.setValue(kits + formattedKitName);
 		try {
 			configManager.save(Main.config);
+			configManager.load();
 		} catch(IOException e) {
 		    System.out.println("[KITS]: Failed to add kit " + kitName);
 		}
@@ -43,6 +45,7 @@ public class Utils {
 		itemNode.setValue(formattedItemName);
 		try {
 			configManager.save(Main.config);
+			configManager.load();
 		} catch(IOException e) {
 			System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}

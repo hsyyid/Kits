@@ -12,15 +12,16 @@ public class KitAddExecutor implements CommandExecutor {
 	
 	public CommandResult execute(CommandSource src, CommandContext args)
 			throws CommandException {
-		System.out.println("Well we know it's still goin in here.");
 		String name = args.<String>getOne("kit name").get();
 		String item = args.<String>getOne("item").get();
 		String items = Main.getItems(name);
 		if(items != null){
 			Utils.addItem(name, item);
+			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The item was added to kit " + name));
 		}
 		else{
 			Utils.addKit(name, item);
+			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The kit was added!", TextColors.RED, "Don't forget to reboot the server for the kit to show up!"));
 		}
 		return CommandResult.success();
 	}

@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 
 @Plugin(id = "Kits", name = "Kits", version = "0.1")
 public class Main {
-	int size = 1;
 	static List<String> allKits = new ArrayList<String>();
 	//Setting up Plugin Logger.
 	static ConfigurationNode config = null;
@@ -125,25 +124,33 @@ public class Main {
 		for(String k : kitList){
 			allKits.add(k);
 		}
-		//Get how many kits are in it.
-		int currentSize = kitList.size();	
-		//Add All Kits to Config
-		if(size < currentSize){
+		
+		//Add All Kits to Config if Not Added Already.
 			for (String k: kitList)
 			{
-				config.getNode("kits", k, "item").setValue("diamond_axe");
-				try {
-					configManager.save(config);
-				} catch (IOException e) {
-					getLogger().error("The default configuration could not be loaded or created!");
+				if(getItems(k) != null){
+					//DO NOTHIN
+				}
+				else{
+					config.getNode("kits", k, "item").setValue("diamond_axe");
+					try {
+						configManager.save(config);
+					} catch (IOException e) {
+						getLogger().error("The default configuration could not be loaded or created!");
+					}
 				}
 			}
-		size = currentSize;
-		
-		}
+			
 		//Sub Commands
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap();
-
+        
+		for(String k : kitList){
+			subcommands.put(Arrays.asList(k), CommandSpec.builder()
+			.setPermission("kits.use." + k)
+			.setDescription(Texts.of("Kit " + k))
+			.setExecutor(new KitExecutor(k))
+			.build());
+		}
 		// /kit add
 		subcommands.put(Arrays.asList("add"), CommandSpec.builder()
 		        .setPermission("kits.add")
@@ -155,11 +162,18 @@ public class Main {
 		        .setExtendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
 		        .build());
 		
+		subcommands.put(Arrays.asList("reload"), CommandSpec.builder()
+		        .setPermission("kits.reload")
+		        .setDescription(Texts.of("Reload the Kits Config"))
+		        .setExecutor(new KitReloadExecutor())
+		        .setExtendedDescription(Texts.of("To reload the config, simply do /kit reload"))
+		        .build());
+		
 		//Register /kit Command
 		CommandSpec myCommandSpec = CommandSpec.builder()
 			    .setDescription(Texts.of("Kits Command"))
 			    .setPermission("kits.use")
-			    .setExecutor(new KitExecutor())
+			    // NOT YET IMPLEMENTED IN SPONGE API .setExecutor(new KitExecutor())
 			    .setArguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))))
 			    .setChildren(subcommands)
 			    .build();

@@ -15,13 +15,21 @@ import org.spongepowered.api.util.command.source.ConsoleSource;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 
 public class KitExecutor implements CommandExecutor {
-
+	String kit;
+	public KitExecutor(String kitName){
+		kit = kitName;
+	}
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
     	Game game = Main.game;
-    	String arguments = args.<String>getOne("kit name").get();
-    	if(arguments != null){
     		//Get Items
-    		String items = Main.getItems(arguments);
+    		String items = "";
+    		if(Main.getItems(kit) != null){
+    			items = Main.getItems(kit);
+    		}
+    		else{
+    			src.sendMessage(Texts.of(TextColors.RED,"Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
+    			return CommandResult.success();
+    		}
     		
     		boolean finished = false;
     		
@@ -67,11 +75,6 @@ public class KitExecutor implements CommandExecutor {
     		else if(src instanceof CommandBlockSource) {
     		    src.sendMessage(Texts.of("Must be an in-game player to use /kit!"));
     		}
-    		
-    	}
-		else{
-			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "Format: /kit <kit name>"));
-		}
         return CommandResult.success();
     }
 }
