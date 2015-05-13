@@ -19,12 +19,12 @@ Simply drop the downloaded JAR into your mods folder! If you don't know how to m
 ## How to Use/Configure Kits?
 To configure Kits, first run the server. A Kits.conf file will be created in your config folder. The starting config will look something like the following:
 
-`kits{`
-  `default{`
-    `items="diamond_axe,"`
-  `}`
-`kits=default,`
-`}`
+kits{
+  default{
+    items="diamond_axe,"
+  }
+kits=default,
+}
 If you go onto your server, and do /kit default you will get a Diamond Axe.
 
 ## Current Commands
@@ -40,19 +40,19 @@ If you'd like to add an item to the kit, there are two ways. The supported way, 
 
 For example, if you'd like to add an apple to kit default, you'd simply do
 
-`/kit add default apple`
+/kit add default apple
 It's as simple as that!
 
 If you'd prefer to do it manually, follow the instructions below:
 
 Open the config. Then, simply write the name of another item such as diamond_hoe and put another comma. If you'd like to specify the quantity of the item, simply put the number after the item id. Refer to the following example:
 
-`kits{`
-      `default{`
-        `items="diamond_axe 10,diamond_hoe 4,"`
-      `}`
-    `kits=default`
-`}`
+kits{
+      default{
+        items="diamond_axe 10,diamond_hoe 4,"
+      }
+    kits=default
+}
 __DO NOT FORGET TO PUT A COMMA AFTER THE LAST ITEM!__
 
 ## Adding Kits
@@ -90,10 +90,10 @@ From here, simply modify the items using the method provided above. NOTE THIS ON
 ## How do you Spawn a Kit?
 
 Simply do:
-`/kit (name)`
+/kit (name)
 Where name and the parenthesis would be replaced with the kit name. An example of spawning the default kit would be as follows:
 
-`/kit default`
+/kit default
 
 ## Permissions
 
