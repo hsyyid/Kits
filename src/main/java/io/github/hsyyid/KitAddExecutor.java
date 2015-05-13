@@ -21,7 +21,7 @@ public class KitAddExecutor implements CommandExecutor {
 		}
 		else{
 			Utils.addKit(name, item);
-			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The kit was added!", TextColors.RED, "Don't forget to reboot the server for the kit to show up!"));
+			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The kit was added! ", TextColors.DARK_GRAY, "Don't forget to reboot the server for the kit to show up!"));
 		}
 		return CommandResult.success();
 	}
