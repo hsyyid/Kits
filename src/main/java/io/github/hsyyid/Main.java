@@ -146,7 +146,8 @@ public class Main {
 		        .arguments(GenericArguments.seq(
 		        		GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
 		                GenericArguments.onlyOne(GenericArguments.string(Texts.of("item")))),
-		                GenericArguments.onlyOne(GenericArguments.integer(Texts.of("number of items"))))
+		                GenericArguments.onlyOne(GenericArguments.integer(Texts.of("number of items"))),
+		                GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Texts.of("item subtype")))))
 		        .executor(new KitAddExecutor())
 		        .extendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
 		        .build());

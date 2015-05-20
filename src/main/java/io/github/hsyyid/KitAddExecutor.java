@@ -17,12 +17,27 @@ public class KitAddExecutor implements CommandExecutor {
 		String noOfItems = "";
 		int numberOfItem = args.<Integer>getOne("number of items").get();
 		noOfItems = Integer.toString(numberOfItem);
+		int subtype = 0;
+		boolean isType = false;
+		try{
+			subtype = args.<Integer>getOne("item subtype").get();
+			isType = true;
+		}catch(IllegalStateException e){
+			//do notin
+		}
+
 		
 		//String Items is Purely to Check if the Kit Exists or Not
 		String items = Main.getItems(name);
 		
 		//Adds the Command with noOfItems.
-		String fullCmd = (item + " " + noOfItems);
+		String fullCmd = ""; 
+		if(isType){
+		  	fullCmd = (item + " " + noOfItems + " " + subtype);
+		}
+		else{
+			fullCmd = (item + " " + noOfItems);
+		}
 		if(items != null){
 			Utils.addItem(name, fullCmd);
 			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The item was added to kit " + name));
