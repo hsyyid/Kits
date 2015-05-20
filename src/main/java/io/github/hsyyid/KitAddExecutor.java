@@ -14,13 +14,21 @@ public class KitAddExecutor implements CommandExecutor {
 			throws CommandException {
 		String name = args.<String>getOne("kit name").get();
 		String item = args.<String>getOne("item").get();
+		String noOfItems = "";
+		int numberOfItem = args.<Integer>getOne("number of items").get();
+		noOfItems = Integer.toString(numberOfItem);
+		
+		//String Items is Purely to Check if the Kit Exists or Not
 		String items = Main.getItems(name);
+		
+		//Adds the Command with noOfItems.
+		String fullCmd = (item + " " + noOfItems);
 		if(items != null){
-			Utils.addItem(name, item);
+			Utils.addItem(name, fullCmd);
 			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The item was added to kit " + name));
 		}
 		else{
-			Utils.addKit(name, item);
+			Utils.addKit(name, fullCmd);
 			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The kit was added! ", TextColors.DARK_GRAY, "Don't forget to reboot the server for the kit to show up!"));
 		}
 		return CommandResult.success();

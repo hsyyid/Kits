@@ -1,6 +1,7 @@
 package io.github.hsyyid;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
@@ -21,6 +22,10 @@ public class KitExecutor implements CommandExecutor {
 	}
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
     	Game game = Main.game;
+    		if(src instanceof Player) {
+    			Player player = (Player) src;
+    			Utils.addConfig(player.getName(), kit);
+    		}
     		//Get Items
     		String items = "";
     		if(Main.getItems(kit) != null){
@@ -60,13 +65,20 @@ public class KitExecutor implements CommandExecutor {
     				finished = true;
     			}
     		}
-    		
+    		Timer t = new Timer();
     		if(src instanceof Player) {
     			Player player = (Player) src;
-    			//Give Player their Kit
-    			for (String i: itemList)
-    			{
-    				game.getCommandDispatcher().process(game.getServer().getConsole(), "give" + " " + player.getName() + " " + i);
+    			if(IntervalTask.canUse(player.getName(), kit)){
+    				//Give Player their Kit
+    				for (String i: itemList)
+    				{
+    					game.getCommandDispatcher().process(game.getServer().getConsole(), "give" + " " + player.getName() + " " + i);
+    				}
+    				Utils.setFalse(player.getName() , kit);
+    				t.schedule(new IntervalTask(player.getName(), kit), Utils.getInterval(kit));
+    			}
+    			else{
+    				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait before using this kit again!"));
     			}
     		}
     		else if(src instanceof ConsoleSource) {

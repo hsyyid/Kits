@@ -8,44 +8,30 @@ import java.util.HashMap;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.state.ServerStartedEvent;
-import org.spongepowered.api.event.state.ServerStoppedEvent;
-import org.spongepowered.api.event.state.ServerStoppingEvent;
-import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.service.config.DefaultConfig;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextBuilder;
 import org.spongepowered.api.text.Texts;
-import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.format.TextStyles;
-import org.spongepowered.api.util.command.CommandCallable;
-import org.spongepowered.api.util.command.CommandSource;
-import org.spongepowered.api.util.command.args.ChildCommandElementExecutor;
 import org.spongepowered.api.util.command.args.GenericArguments;
-import org.spongepowered.api.util.command.dispatcher.SimpleDispatcher;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import com.google.inject.Inject;
 
 import org.slf4j.Logger;
 
-@Plugin(id = "Kits", name = "Kits", version = "0.1")
+@Plugin(id = "Kits", name = "Kits", version = "0.3")
 public class Main {
 	static List<String> allKits = new ArrayList<String>();
 	//Setting up Plugin Logger.
 	static ConfigurationNode config = null;
+	static ConfigurationNode intervalConfig = null;
 	static ConfigurationLoader<CommentedConfigurationNode> configurationManager;
 
 	static Game game;
@@ -65,7 +51,7 @@ public class Main {
 	
 	@Subscribe
     public void onServerStart(ServerStartedEvent event) {
-		getLogger().info("Kits loaded!");
+		getLogger().info("Kits loading...");
 		
 		game = event.getGame();
 		
@@ -79,7 +65,8 @@ public class Main {
 		        config = configManager.load();
 		        config.getNode("kits", "kits").setValue("default,");
 		        config.getNode("kits", "default", "item").setValue("diamond_axe,");
-		        configManager.save(config);
+		        config.getNode("kits", "default", "interval").setValue(30000);
+		        configManager.save(config); 
 		    }
 		    configurationManager = configManager;
 		    config = configManager.load();
@@ -95,6 +82,7 @@ public class Main {
 		boolean finished = false;
 		//Array List to Keep all the Kits in
 		ArrayList<String> kitList = new ArrayList<String>();
+		
 		//Add all kits to kitList
 		if(finished != true){
 			int endIndex = kit.indexOf(",");
@@ -146,42 +134,59 @@ public class Main {
         
 		for(String k : kitList){
 			subcommands.put(Arrays.asList(k), CommandSpec.builder()
-			.setPermission("kits.use." + k)
-			.setDescription(Texts.of("Kit " + k))
-			.setExecutor(new KitExecutor(k))
+			.permission("kits.use." + k)
+			.description(Texts.of("Kit " + k))
+			.executor(new KitExecutor(k))
 			.build());
 		}
 		// /kit add
 		subcommands.put(Arrays.asList("add"), CommandSpec.builder()
-		        .setPermission("kits.add")
-		        .setDescription(Texts.of("Add a Kit or Item to a Kit"))
-		        .setArguments(GenericArguments.seq(
+		        .permission("kits.add")
+		        .description(Texts.of("Add a Kit or Item to a Kit"))
+		        .arguments(GenericArguments.seq(
 		        		GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
-		                GenericArguments.onlyOne(GenericArguments.string(Texts.of("item")))))
-		        .setExecutor(new KitAddExecutor())
-		        .setExtendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
+		                GenericArguments.onlyOne(GenericArguments.string(Texts.of("item")))),
+		                GenericArguments.onlyOne(GenericArguments.integer(Texts.of("number of items"))))
+		        .executor(new KitAddExecutor())
+		        .extendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
+		        .build());
+		
+		subcommands.put(Arrays.asList("interval"), CommandSpec.builder()
+		        .permission("kits.interval")
+		        .description(Texts.of("Change a Kit's Interval"))
+		        .arguments(GenericArguments.seq(
+		        		GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
+		        		GenericArguments.onlyOne(GenericArguments.integer(Texts.of("kit interval")))))
+		        .executor(new KitIntervalExecutor())
+		        .extendedDescription(Texts.of("To use /kit interval simply do /kit interval <kit name> <interval>"))
 		        .build());
 		
 		subcommands.put(Arrays.asList("reload"), CommandSpec.builder()
-		        .setPermission("kits.reload")
-		        .setDescription(Texts.of("Reload the Kits Config"))
-		        .setExecutor(new KitReloadExecutor())
-		        .setExtendedDescription(Texts.of("To reload the config, simply do /kit reload"))
+		        .permission("kits.reload")
+		        .description(Texts.of("Reload the Kits Config"))
+		        .executor(new KitReloadExecutor())
+		        .extendedDescription(Texts.of("To reload the config, simply do /kit reload"))
 		        .build());
 		
 		//Register /kit Command
 		CommandSpec myCommandSpec = CommandSpec.builder()
-			    .setDescription(Texts.of("Kits Command"))
-			    .setPermission("kits.use")
+			    .extendedDescription(Texts.of("Kits Command"))
+			    .permission("kits.use")
 			    // NOT YET IMPLEMENTED IN SPONGE API .setExecutor(new KitExecutor())
-			    .setArguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))))
-			    .setChildren(subcommands)
+			    .arguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("help"))))
+			    .children(subcommands)
 			    .build();
 
 			game.getCommandDispatcher().register(this, myCommandSpec, "kit");
 			
         CommandService cmdService = event.getGame().getCommandDispatcher();
         cmdService.register(this, new ListCommand(server), "kits");
+        getLogger().info("-----------------------------");
+        getLogger().info("Kits was made by HassanS6000!");
+        getLogger().info("Please post all errors with Kits on the Sponge Thread or on GitHub!");
+        getLogger().info("Have fun, and enjoy your Kits! :D");
+        getLogger().info("-----------------------------");
+        getLogger().info("Kits Loaded!");
 	}
 	public static ConfigurationLoader<CommentedConfigurationNode> getConfigManager(){
 		return configurationManager;

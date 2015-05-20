@@ -2,6 +2,7 @@ package io.github.hsyyid;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
 
 import org.spongepowered.api.service.config.DefaultConfig;
 
@@ -49,5 +50,80 @@ public class Utils {
 		} catch(IOException e) {
 			System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}
+		ConfigurationNode intervalNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		intervalNode.setValue(30000);
+		try {
+			configManager.save(Main.config);
+			configManager.load();
+		} catch(IOException e) {
+			System.out.println("[KITS]: Failed to set the interval on the kit!");
+		}
+	}
+	
+	//Adds Players to Config
+	public static void addConfig(String name, String kitName){
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		Timer t = new Timer();
+		if(inConfig(name, kitName)){
+			t.schedule(new IntervalTask(name, kitName), getInterval(kitName));
+		}
+		else{
+			Main.config.getNode("players", name, kitName, "usable").setValue("false");
+			try {
+				configManager.save(Main.config);
+				configManager.load();
+			} catch(IOException e) {
+			    System.out.println("[KITS]: Failed to add " + name + " to config!");
+			}
+			t.schedule(new IntervalTask(name, kitName), getInterval(kitName));
+		}
+	}
+	//Check if Player is In Config
+	public static boolean inConfig(String userName, String kitName){
+		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
+		Object inConfig = valueNode.getValue();
+		if(inConfig != null){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Checks if Player can Use It
+	public static boolean canUse(String userName, String kitName){
+		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
+		boolean b = valueNode.getBoolean();
+		return b;
+	}
+	public static void setFalse(String name, String kitName){
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + name + "." + kitName + ".usable").split("\\."));
+		valueNode.setValue(false);
+		try {
+			configManager.save(Main.config);
+			configManager.load();
+		} catch(IOException e) {
+		    System.out.println("[KITS]: Failed to save config!");
+		}
+	}
+	//Get Kit Interval
+	public static int getInterval(String kitName){
+		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		int interval = valueNode.getInt();
+		return interval;
+	}
+	//Set Kit Interval
+	public static void setInterval(int interval, String kitName) {
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		ConfigurationNode intervalNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		intervalNode.setValue(interval);
+		try {
+			configManager.save(Main.config);
+			configManager.load();
+		} catch(IOException e) {
+			System.out.println("[KITS]: Failed to change the interval for kit " + kitName);
+		}
+		
 	}
 }
+
