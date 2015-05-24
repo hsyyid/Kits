@@ -12,9 +12,11 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 import org.spongepowered.api.Game;
+import org.spongepowered.api.GameRegistry;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.state.ServerStartedEvent;
+import org.spongepowered.api.item.inventory.ItemStackBuilder;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.service.config.DefaultConfig;
@@ -26,15 +28,15 @@ import com.google.inject.Inject;
 
 import org.slf4j.Logger;
 
-@Plugin(id = "Kits", name = "Kits", version = "0.3")
+@Plugin(id = "Kits", name = "Kits", version = "0.4")
 public class Main {
 	static List<String> allKits = new ArrayList<String>();
 	//Setting up Plugin Logger.
+	static ItemStackBuilder ItemBuilder = null;
 	static ConfigurationNode config = null;
 	static ConfigurationNode intervalConfig = null;
 	static ConfigurationLoader<CommentedConfigurationNode> configurationManager;
-
-	static Game game;
+	static Game game = null;
 	@Inject
 	private Logger logger;
 	
@@ -44,6 +46,7 @@ public class Main {
 	@Inject
 	@DefaultConfig(sharedRoot = true)
 	private File defaultConfig;
+
 	
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -54,6 +57,10 @@ public class Main {
 		getLogger().info("Kits loading...");
 		
 		game = event.getGame();
+		
+		GameRegistry registry = game.getRegistry();
+		ItemStackBuilder builder = registry.getItemBuilder();
+		ItemBuilder = builder;
 		
 		//Get Server
 		Server server = event.getGame().getServer();
@@ -160,6 +167,15 @@ public class Main {
 		        		GenericArguments.onlyOne(GenericArguments.integer(Texts.of("kit interval")))))
 		        .executor(new KitIntervalExecutor())
 		        .extendedDescription(Texts.of("To use /kit interval simply do /kit interval <kit name> <interval>"))
+		        .build());
+		
+		subcommands.put(Arrays.asList("delete"), CommandSpec.builder()
+		        .permission("kits.delete")
+		        .description(Texts.of("Delete a Kit from the Config"))
+		        .arguments(GenericArguments.seq(
+		        		GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name")))))
+		        .executor(new KitDeleteExecutor())
+		        .extendedDescription(Texts.of("To use /kit delete simply do /kit delete <kit name>"))
 		        .build());
 		
 		subcommands.put(Arrays.asList("reload"), CommandSpec.builder()
