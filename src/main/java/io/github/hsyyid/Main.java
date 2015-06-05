@@ -190,7 +190,7 @@ public class Main {
 			    .extendedDescription(Texts.of("Kits Command"))
 			    .permission("kits.use")
 			    // NOT YET IMPLEMENTED IN SPONGE API .setExecutor(new KitExecutor())
-			    .arguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("help"))))
+			    //.arguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("help"))))
 			    .children(subcommands)
 			    .build();
 
