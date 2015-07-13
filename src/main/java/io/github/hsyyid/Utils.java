@@ -68,7 +68,7 @@ public class Utils {
 			t.schedule(new IntervalTask(name, kitName), getInterval(kitName));
 		}
 		else{
-			Main.config.getNode("players", name, kitName, "usable").setValue("false");
+			Main.config.getNode("players", name, kitName, "usable").setValue("true");
 			try {
 				configManager.save(Main.config);
 				configManager.load();
