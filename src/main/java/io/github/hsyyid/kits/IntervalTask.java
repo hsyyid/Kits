@@ -1,7 +1,6 @@
-package io.github.hsyyid;
+package io.github.hsyyid.kits;
 
 import java.io.IOException;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;

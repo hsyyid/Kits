@@ -1,15 +1,9 @@
-package io.github.hsyyid;
+package io.github.hsyyid.kits;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 
-import org.spongepowered.api.service.config.DefaultConfig;
-
-import com.google.inject.Inject;
-
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 

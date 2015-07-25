@@ -1,23 +1,18 @@
-package io.github.hsyyid;
+package io.github.hsyyid.kits;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.Inventory;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackBuilder;
-import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
-import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.source.CommandBlockSource;
 import org.spongepowered.api.util.command.source.ConsoleSource;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
@@ -25,6 +20,8 @@ import org.spongepowered.api.util.command.spec.CommandExecutor;
 public class KitExecutor implements CommandExecutor {
 	String kit;
 	ItemStackBuilder builder = Main.ItemBuilder;
+	double timeRemaining;
+	
 	public KitExecutor(String kitName){
 		kit = kitName;
 	}
@@ -74,15 +71,18 @@ public class KitExecutor implements CommandExecutor {
     			}
     		}
     		Timer t = new Timer();
+    		long lastTimeUsed = 0;
     		if(src instanceof Player) {		
     			Player player = (Player) src;
-    			if(IntervalTask.canUse(player.getName(), kit)){
+    			if(IntervalTask.canUse(player.getName(), kit))
+    			{
     				//INVENTORY API Proposed Code - NO QUANTITY, ETC. WON'T WORK WITHOUT HAVING i BE THE ACTUAL ITEM - NOT A QUANTITY!
     				//for(String i : itemList){
         			//Inventory i = player.getInventory();
         			//ItemStack itemStack = builder.itemType(ItemTypes.i).build();
     				//i.offer(itemStack);
     				//}
+    				
     				//Give Player their Kit
     				for (String i: itemList)
     				{
@@ -90,9 +90,11 @@ public class KitExecutor implements CommandExecutor {
     				}
     				Utils.setFalse(player.getName() , kit);
     				t.schedule(new IntervalTask(player.getName(), kit), Utils.getInterval(kit));
+    				lastTimeUsed = System.currentTimeMillis();
     			}
-    			else{
-    				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait before using this kit again!"));
+    			else
+    			{
+    				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait " + ((Utils.getInterval(kit) - (System.currentTimeMillis() - lastTimeUsed)) * 0.001) + " seconds before using this kit again!"));
     			}
     		}
     		else if(src instanceof ConsoleSource) {

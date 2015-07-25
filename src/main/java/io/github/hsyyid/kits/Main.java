@@ -1,4 +1,4 @@
-package io.github.hsyyid;
+package io.github.hsyyid.kits;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class Main {
 			}
 			
 		//Sub Commands
-		HashMap<List<String>, CommandSpec> subcommands = new HashMap();
+		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
         
 		for(String k : kitList){
 			subcommands.put(Arrays.asList(k), CommandSpec.builder()

@@ -1,4 +1,4 @@
-package io.github.hsyyid;
+package io.github.hsyyid.kits;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
