@@ -28,10 +28,9 @@ import com.google.inject.Inject;
 
 import org.slf4j.Logger;
 
-@Plugin(id = "Kits", name = "Kits", version = "0.4")
+@Plugin(id = "Kits", name = "Kits", version = "0.5")
 public class Main {
 	static List<String> allKits = new ArrayList<String>();
-	//Setting up Plugin Logger.
 	static ItemStackBuilder ItemBuilder = null;
 	static ConfigurationNode config = null;
 	static ConfigurationNode intervalConfig = null;

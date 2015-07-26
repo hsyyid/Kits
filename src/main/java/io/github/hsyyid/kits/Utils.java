@@ -3,6 +3,13 @@ package io.github.hsyyid.kits;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import org.spongepowered.api.Game;
+import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.service.scheduler.SchedulerService;
+import org.spongepowered.api.service.scheduler.Task;
+import org.spongepowered.api.service.scheduler.TaskBuilder;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -20,7 +27,7 @@ public class Utils {
 			configManager.save(Main.config);
 			configManager.load();
 		} catch(IOException e) {
-		    System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
+			System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}
 	}
 	//Adds Kit + an Item to the Config!
@@ -34,7 +41,7 @@ public class Utils {
 			configManager.save(Main.config);
 			configManager.load();
 		} catch(IOException e) {
-		    System.out.println("[KITS]: Failed to add kit " + kitName);
+			System.out.println("[KITS]: Failed to add kit " + kitName);
 		}
 		ConfigurationNode itemNode = Main.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
 		String formattedItemName = (item + ",");
@@ -54,16 +61,35 @@ public class Utils {
 			System.out.println("[KITS]: Failed to set the interval on the kit!");
 		}
 	}
-	
+
 	//Adds Players to Config
 	public static void addConfig(UUID playerName, String kitName)
 	{
+		final UUID userName = playerName;
+		final String kit = kitName;
+		Game game = Main.game;
+		SchedulerService scheduler = game.getScheduler();
+		TaskBuilder taskBuilder = scheduler.getTaskBuilder();
 		String name = playerName.toString();
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
 		Timer t = new Timer();
 		if(inConfig(playerName, kitName))
 		{
-			t.schedule(new IntervalTask(name, kitName), getInterval(kitName));
+			Task task = taskBuilder.execute(new Runnable() {
+				public void run() {
+					ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+					Main.config.getNode("players", userName.toString(), kit, "usable").setValue("true");
+					try
+					{
+						configManager.save(Main.config);
+						configManager.load();
+					}
+					catch(IOException e)
+					{
+						System.out.println("[KITS]: Failed to save config!");
+					}
+				}
+			}).delay(Utils.getInterval(kitName), TimeUnit.MILLISECONDS).name("Kits - Sets Value").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
 		}
 		else{
 			Main.config.getNode("players", name, kitName, "usable").setValue("true");
@@ -71,9 +97,23 @@ public class Utils {
 				configManager.save(Main.config);
 				configManager.load();
 			} catch(IOException e) {
-			    System.out.println("[KITS]: Failed to add " + name + " to config!");
+				System.out.println("[KITS]: Failed to add " + name + " to config!");
 			}
-			t.schedule(new IntervalTask(name, kitName), getInterval(kitName));
+			Task task = taskBuilder.execute(new Runnable() {
+				public void run() {
+					ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+					Main.config.getNode("players", userName.toString(), kit, "usable").setValue("true");
+					try
+					{
+						configManager.save(Main.config);
+						configManager.load();
+					}
+					catch(IOException e)
+					{
+						System.out.println("[KITS]: Failed to save config!");
+					}
+				}
+			}).delay(Utils.getInterval(kitName), TimeUnit.MILLISECONDS).name("Kits - Sets Val Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
 		}
 	}
 	//Check if Player is In Config
@@ -107,7 +147,7 @@ public class Utils {
 			configManager.save(Main.config);
 			configManager.load();
 		} catch(IOException e) {
-		    System.out.println("[KITS]: Failed to save config!");
+			System.out.println("[KITS]: Failed to save config!");
 		}
 	}
 	//Get Kit Interval
@@ -129,7 +169,7 @@ public class Utils {
 		} catch(IOException e) {
 			System.out.println("[KITS]: Failed to change the interval for kit " + kitName);
 		}
-		
+
 	}
 }
 
