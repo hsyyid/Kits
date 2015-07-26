@@ -29,7 +29,7 @@ public class KitExecutor implements CommandExecutor {
     	Game game = Main.game;
     		if(src instanceof Player) {
     			Player player = (Player) src;
-    			Utils.addConfig(player.getName(), kit);
+    			Utils.addConfig(player.getUniqueId(), kit);
     		}
     		//Get Items
     		String items = "";
@@ -71,10 +71,10 @@ public class KitExecutor implements CommandExecutor {
     			}
     		}
     		Timer t = new Timer();
-    		long lastTimeUsed = 0;
+    		//long lastTimeUsed = 0;
     		if(src instanceof Player) {		
     			Player player = (Player) src;
-    			if(IntervalTask.canUse(player.getName(), kit))
+    			if(IntervalTask.canUse(player.getUniqueId(), kit))
     			{
     				//INVENTORY API Proposed Code - NO QUANTITY, ETC. WON'T WORK WITHOUT HAVING i BE THE ACTUAL ITEM - NOT A QUANTITY!
     				//for(String i : itemList){
@@ -88,13 +88,13 @@ public class KitExecutor implements CommandExecutor {
     				{
     					game.getCommandDispatcher().process(game.getServer().getConsole(), "give" + " " + player.getName() + " " + i);
     				}
-    				Utils.setFalse(player.getName() , kit);
-    				t.schedule(new IntervalTask(player.getName(), kit), Utils.getInterval(kit));
-    				lastTimeUsed = System.currentTimeMillis();
+    				Utils.setFalse(player.getUniqueId(), kit);
+    				t.schedule(new IntervalTask(player.getUniqueId().toString(), kit), Utils.getInterval(kit));
+    				//lastTimeUsed = System.currentTimeMillis();
     			}
     			else
     			{
-    				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait " + ((Utils.getInterval(kit) - (System.currentTimeMillis() - lastTimeUsed)) * 0.001) + " seconds before using this kit again!"));
+    				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait before using this Kt again!")); //+ ((Utils.getInterval(kit) - (System.currentTimeMillis() - lastTimeUsed)) * 0.001) + " seconds before using this kit again!"));
     			}
     		}
     		else if(src instanceof ConsoleSource) {

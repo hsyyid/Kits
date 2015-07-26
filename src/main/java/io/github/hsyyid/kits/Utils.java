@@ -2,6 +2,7 @@ package io.github.hsyyid.kits;
 
 import java.io.IOException;
 import java.util.Timer;
+import java.util.UUID;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -55,10 +56,13 @@ public class Utils {
 	}
 	
 	//Adds Players to Config
-	public static void addConfig(String name, String kitName){
+	public static void addConfig(UUID playerName, String kitName)
+	{
+		String name = playerName.toString();
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
 		Timer t = new Timer();
-		if(inConfig(name, kitName)){
+		if(inConfig(playerName, kitName))
+		{
 			t.schedule(new IntervalTask(name, kitName), getInterval(kitName));
 		}
 		else{
@@ -73,7 +77,9 @@ public class Utils {
 		}
 	}
 	//Check if Player is In Config
-	public static boolean inConfig(String userName, String kitName){
+	public static boolean inConfig(UUID playerName, String kitName)
+	{
+		String userName = playerName.toString();
 		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
 		Object inConfig = valueNode.getValue();
 		if(inConfig != null){
@@ -84,12 +90,16 @@ public class Utils {
 		}
 	}
 	//Checks if Player can Use It
-	public static boolean canUse(String userName, String kitName){
+	public static boolean canUse(UUID playerName, String kitName)
+	{
+		String userName = playerName.toString();
 		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
 		boolean b = valueNode.getBoolean();
 		return b;
 	}
-	public static void setFalse(String name, String kitName){
+	public static void setFalse(UUID playerName, String kitName)
+	{
+		String name = playerName.toString();
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
 		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + name + "." + kitName + ".usable").split("\\."));
 		valueNode.setValue(false);
@@ -101,13 +111,15 @@ public class Utils {
 		}
 	}
 	//Get Kit Interval
-	public static int getInterval(String kitName){
+	public static int getInterval(String kitName)
+	{
 		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		int interval = valueNode.getInt();
 		return interval;
 	}
 	//Set Kit Interval
-	public static void setInterval(int interval, String kitName) {
+	public static void setInterval(int interval, String kitName)
+	{
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
 		ConfigurationNode intervalNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		intervalNode.setValue(interval);
