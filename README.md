@@ -21,10 +21,12 @@ To configure Kits, first run the server. A Kits.conf file will be created in you
 
 ## Current Commands
 
-* /kits [pgNo] - Shows a PaginatedList of all the avaliable kits, and enables you to spawn them in by click on text.
-* /kit [name] - Spawns in a Kit with the speicified name.
-* /kit reload - Reloads Kits Config
+* /kits [pgNo] - Shows a PaginatedList of all the available kits, and enables you to spawn them in by click on text.
+* /kit [name] - Spawns in a Kit with the specified name.
+* /kit reload - Reloads Kits Config.
 * /kit add [kit name] [item name] - Adds an Item to a Kit or can Add a Kit with a Specified Item.
+* /kit delete [kit name] - Deletes specified Kit.
+* /kit interval [kit name] [interval] - Change the interval of the specified kit in MILLISECONDS.
 
 ## Adding Items to a Kit
 
@@ -54,9 +56,12 @@ Where name and the parenthesis would be replaced with the kit name. An example o
 
 ## Permissions
 
-kits.use - Access to the /kit command.
-kits.reload - Access to the /kit reload command.
-kits.list - Access to the /kits command.
+* kits.use - Access to the /kit command.
+* kits.reload - Access to the /kit reload command.
+* kits.list - Access to the /kits command.
+* kits.add - Access to the /kit add command
+* kits.interval - Access to the /kit interval command
+* kits.delete - Access to the /kit delete command.
 
 ## Kit Specific Permissions
 
