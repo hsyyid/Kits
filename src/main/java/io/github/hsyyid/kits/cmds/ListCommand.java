@@ -1,4 +1,7 @@
-package io.github.hsyyid.kits;
+package io.github.hsyyid.kits.cmds;
+
+import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.utils.PaginatedList;
 
 import java.util.ArrayList;
 import java.util.List;

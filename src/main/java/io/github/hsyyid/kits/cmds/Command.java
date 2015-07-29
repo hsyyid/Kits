@@ -1,4 +1,4 @@
-package io.github.hsyyid.kits;
+package io.github.hsyyid.kits.cmds;
 
 import java.util.ArrayList;
 import java.util.List;

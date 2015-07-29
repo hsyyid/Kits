@@ -1,4 +1,6 @@
-package io.github.hsyyid.kits;
+package io.github.hsyyid.kits.utils;
+
+import io.github.hsyyid.kits.Main;
 
 import java.io.IOException;
 import java.util.Timer;

@@ -1,4 +1,4 @@
-package io.github.hsyyid.kits;
+package io.github.hsyyid.kits.utils;
 
 public class PaginatedListUtil {
 

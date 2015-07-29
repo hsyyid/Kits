@@ -1,9 +1,10 @@
-package io.github.hsyyid.kits;
+package io.github.hsyyid.kits.cmds;
+
+import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -12,7 +13,6 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStackBuilder;
-import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.scheduler.SchedulerService;
 import org.spongepowered.api.service.scheduler.Task;
 import org.spongepowered.api.service.scheduler.TaskBuilder;
@@ -82,7 +82,6 @@ public class KitExecutor implements CommandExecutor {
 				finished = true;
 			}
 		}
-		Timer t = new Timer();
 
 		if(src instanceof Player) {		
 			final Player player = (Player) src;
@@ -101,7 +100,9 @@ public class KitExecutor implements CommandExecutor {
 					game.getCommandDispatcher().process(game.getServer().getConsole(), "give" + " " + player.getName() + " " + i);
 				}
 				Utils.setFalse(player.getUniqueId(), kit);
-
+				
+				timeRemaining = Utils.getInterval(kit) * 0.001;
+				
 				Task task = taskBuilder.execute(new Runnable() {
 					public void run() {
 						ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
@@ -117,10 +118,19 @@ public class KitExecutor implements CommandExecutor {
 						}
 					}
 				}).delay(Utils.getInterval(kit), TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
+				
+				Task task2 = taskBuilder.execute(new Runnable() {
+					public void run() {
+						if(timeRemaining > 0)
+						{
+							timeRemaining--;
+						}
+					}
+				}).delay(0, TimeUnit.SECONDS).name("Kits - Counts remaining time").interval(1, TimeUnit.SECONDS).submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
 			}
 			else
 			{
-				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait before using this Kit again!")); //+ ((Utils.getInterval(kit) - (System.currentTimeMillis() - lastTimeUsed)) * 0.001) + " seconds before using this kit again!"));
+				src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
 			}
 		}
 		else if(src instanceof ConsoleSource) {

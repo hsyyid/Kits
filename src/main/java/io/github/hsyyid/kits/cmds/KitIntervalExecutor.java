@@ -1,4 +1,6 @@
-package io.github.hsyyid.kits;
+package io.github.hsyyid.kits.cmds;
+
+import io.github.hsyyid.kits.utils.Utils;
 
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
