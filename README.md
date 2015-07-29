@@ -74,4 +74,4 @@ kits.use.default
 [Issues]: https://github.com/hsyyid/Kits/issues
 [Sponge Website Posting]: https://forums.spongepowered.org/t/kits-v0-1/7099
 [Source]: https://github.com/hsyyid/Kits/tree/master/src/main/java/io/github/hsyyid
-[here]: http://www.mediafire.com/download/lvum35nnsebi8l0/Kits-0.1.jar
+[here]: https://github.com/hsyyid/Kits/releases
