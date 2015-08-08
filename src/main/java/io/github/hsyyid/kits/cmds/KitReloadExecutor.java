@@ -15,17 +15,23 @@ import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 
-public class KitReloadExecutor implements CommandExecutor {
+public class KitReloadExecutor implements CommandExecutor
+{
 	ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+
 	public CommandResult execute(CommandSource src, CommandContext arg1)
-			throws CommandException {
-		try {
+		throws CommandException
+	{
+		try
+		{
 			configManager.load();
-		} catch (IOException e) {
-			src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "The config was not reloaded!"));
 		}
-		
-		src.sendMessage(Texts.of(TextColors.GREEN,"Success: ", TextColors.YELLOW, "The config was reloaded."));
+		catch (IOException e)
+		{
+			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The config was not reloaded!"));
+		}
+
+		src.sendMessage(Texts.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The config was reloaded."));
 		return CommandResult.success();
 	}
 
