@@ -41,6 +41,7 @@ public class KitExecutor implements CommandExecutor
 		Game game = Main.game;
 		SchedulerService scheduler = game.getScheduler();
 		TaskBuilder taskBuilder = scheduler.getTaskBuilder();
+		TaskBuilder taskBuilder2 = scheduler.getTaskBuilder();
 
 		if (src instanceof Player)
 		{
@@ -124,7 +125,7 @@ public class KitExecutor implements CommandExecutor
 						}
 					}).delay(val, TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
 					
-					taskBuilder.execute(new Runnable()
+					taskBuilder2.execute(new Runnable()
 					{
 						public void run()
 						{
@@ -140,8 +141,7 @@ public class KitExecutor implements CommandExecutor
 			{
 				if (Utils.getInterval(kit) instanceof Integer)
 				{
-					src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
-//					src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
+					src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
 				}
 				else if (Utils.getInterval(kit) instanceof Boolean)
 				{
