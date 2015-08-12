@@ -67,7 +67,7 @@ public class Main
 		game = event.getGame();
 
 		GameRegistry registry = game.getRegistry();
-		ItemStackBuilder builder = registry.getItemBuilder();
+		ItemStackBuilder builder = registry.createItemBuilder();
 		ItemBuilder = builder;
 
 		// Config File

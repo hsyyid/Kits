@@ -84,7 +84,7 @@ public class Utils
 		final String kit = kitName;
 		Game game = Main.game;
 		SchedulerService scheduler = game.getScheduler();
-		TaskBuilder taskBuilder = scheduler.getTaskBuilder();
+		TaskBuilder taskBuilder = scheduler.createTaskBuilder();
 		String name = playerName.toString();
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
 		if(Utils.getInterval(kitName) instanceof Integer)

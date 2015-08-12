@@ -40,8 +40,8 @@ public class KitExecutor implements CommandExecutor
 	{
 		Game game = Main.game;
 		SchedulerService scheduler = game.getScheduler();
-		TaskBuilder taskBuilder = scheduler.getTaskBuilder();
-		TaskBuilder taskBuilder2 = scheduler.getTaskBuilder();
+		TaskBuilder taskBuilder = scheduler.createTaskBuilder();
+		TaskBuilder taskBuilder2 = scheduler.createTaskBuilder();
 
 		if (src instanceof Player)
 		{
