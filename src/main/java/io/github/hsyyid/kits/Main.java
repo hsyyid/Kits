@@ -21,8 +21,8 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.GameRegistry;
-import org.spongepowered.api.event.Subscribe;
-import org.spongepowered.api.event.state.ServerStartedEvent;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.item.inventory.ItemStackBuilder;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
@@ -59,8 +59,8 @@ public class Main
 	@DefaultConfig(sharedRoot = true)
 	private ConfigurationLoader<CommentedConfigurationNode> configManager;
 
-	@Subscribe
-	public void onServerStart(ServerStartedEvent event)
+	@Listener
+	public void onServerStart(GameStartedServerEvent event)
 	{
 		getLogger().info("Kits loading...");
 
