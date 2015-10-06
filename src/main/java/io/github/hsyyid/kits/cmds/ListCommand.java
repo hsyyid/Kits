@@ -2,10 +2,6 @@ package io.github.hsyyid.kits.cmds;
 
 import io.github.hsyyid.kits.Main;
 import io.github.hsyyid.kits.utils.PaginatedList;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.spongepowered.api.Game;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextBuilder;
@@ -18,7 +14,9 @@ import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
 
-import com.google.common.base.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ListCommand implements CommandCallable
 {
