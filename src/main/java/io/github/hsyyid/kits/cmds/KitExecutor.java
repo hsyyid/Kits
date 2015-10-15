@@ -124,7 +124,7 @@ public class KitExecutor implements CommandExecutor
 							}
 						}
 					}).delay(val, TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
-					
+
 					taskBuilder2.execute(new Runnable()
 					{
 						public void run()
@@ -141,7 +141,10 @@ public class KitExecutor implements CommandExecutor
 			{
 				if (Utils.getInterval(kit) instanceof Integer)
 				{
-					src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
+					if (timeRemaining > 0)
+						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
+					else
+						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
 				}
 				else if (Utils.getInterval(kit) instanceof Boolean)
 				{
