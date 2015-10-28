@@ -55,7 +55,7 @@ public class KitExecutor implements CommandExecutor
 			}
 			else
 			{
-				player.sendMessage(Texts.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
+				player.sendMessage(Texts.of(TextColors.RED, "Error! ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
 				return CommandResult.success();
 			}
 
@@ -120,7 +120,7 @@ public class KitExecutor implements CommandExecutor
 							}
 							catch (IOException e)
 							{
-								System.out.println("[Kits]: Failed to save config!");
+								System.out.println("[KITS]: Failed to save config!");
 							}
 						}
 					}).delay(val, TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());

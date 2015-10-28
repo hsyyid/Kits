@@ -237,7 +237,7 @@ public class Utils
 		}
 		catch (IOException e)
 		{
-			System.out.println("[Kits]: Failed to change the interval for kit " + kitName);
+			System.out.println("[KITS]: Failed to change the interval for kit " + kitName);
 		}
 
 	}

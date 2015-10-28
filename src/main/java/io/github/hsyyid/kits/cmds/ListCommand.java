@@ -41,7 +41,7 @@ public class ListCommand implements CommandCallable
 			}
 			catch (NumberFormatException e)
 			{
-				src.sendMessage(Texts.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "Format: /kits <page number>"));
+				src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "Format: /kits <page number>"));
 			}
 		}
 		// Add List
