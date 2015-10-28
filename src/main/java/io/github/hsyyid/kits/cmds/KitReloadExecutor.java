@@ -31,7 +31,7 @@ public class KitReloadExecutor implements CommandExecutor
 			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The config was not reloaded!"));
 		}
 
-		src.sendMessage(Texts.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The config was reloaded."));
+		src.sendMessage(Texts.of(TextColors.GREEN, "Success! ", TextColors.YELLOW, "The config was reloaded."));
 		return CommandResult.success();
 	}
 

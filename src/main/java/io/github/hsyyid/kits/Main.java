@@ -178,7 +178,7 @@ public class Main
 				GenericArguments.onlyOne(GenericArguments.integer(Texts.of("number of items"))),
 				GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Texts.of("item subtype")))))
 			.executor(new KitAddExecutor())
-			.extendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
+			.extendedDescription(Texts.of("Usage: /kit add <kit name> <item id>"))
 			.build());
 
 		subcommands.put(Arrays.asList("interval"), CommandSpec.builder()
@@ -190,7 +190,7 @@ public class Main
 					GenericArguments.onlyOne(GenericArguments.integer(Texts.of("kit interval"))),
 					GenericArguments.onlyOne(GenericArguments.bool(Texts.of("one-time"))))))
 			.executor(new KitIntervalExecutor())
-			.extendedDescription(Texts.of("To use /kit interval simply do /kit interval <kit name> <interval|one-time>"))
+			.extendedDescription(Texts.of("Usage: /kit interval <kit name> <interval|one-time>"))
 			.build());
 
 		subcommands.put(Arrays.asList("delete"), CommandSpec.builder()
@@ -199,14 +199,14 @@ public class Main
 			.arguments(GenericArguments.seq(
 				GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name")))))
 			.executor(new KitDeleteExecutor())
-			.extendedDescription(Texts.of("To use /kit delete simply do /kit delete <kit name>"))
+			.extendedDescription(Texts.of("Usage: /kit delete <kit name>"))
 			.build());
 
 		subcommands.put(Arrays.asList("reload"), CommandSpec.builder()
 			.permission("kits.reload")
 			.description(Texts.of("Reload the Kits Config"))
 			.executor(new KitReloadExecutor())
-			.extendedDescription(Texts.of("To reload the config, simply do /kit reload"))
+			.extendedDescription(Texts.of("Usage: /kit reload"))
 			.build());
 
 		// Register /kit Command
@@ -244,7 +244,7 @@ public class Main
 		}
 		else
 		{
-			System.out.println("[Kits]: " + kitName + " does not exist!");
+			System.out.println("[KITS]: " + kitName + " does not exist!");
 			return null;
 		}
 	}
