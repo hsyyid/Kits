@@ -1,6 +1,6 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.Utils;
 
 import org.spongepowered.api.text.Texts;
@@ -31,7 +31,7 @@ public class KitAddExecutor implements CommandExecutor {
 
 		
 		//String Items is Purely to Check if the Kit Exists or Not
-		String items = Main.getItems(name);
+		String items = Kits.getItems(name);
 		
 		//Adds the Command with noOfItems.
 		String fullCmd = ""; 

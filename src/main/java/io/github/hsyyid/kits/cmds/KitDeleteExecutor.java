@@ -1,6 +1,6 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.Kits;
 
 import java.io.IOException;
 
@@ -23,9 +23,9 @@ public class KitDeleteExecutor implements CommandExecutor {
 		//Get the name of the Kit to Delete
 		String name = args.<String>getOne("kit name").get();
 		//Get Config Manager
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
 		//Get Kit Node
-		ConfigurationNode kitNode = Main.config.getNode((Object[]) ("kits.kits").split("\\."));
+		ConfigurationNode kitNode = Kits.config.getNode((Object[]) ("kits.kits").split("\\."));
 		//Get Value of Kits Node
 		String kits = kitNode.getString();
 		//Remove Kit from Kits Node
@@ -33,25 +33,25 @@ public class KitDeleteExecutor implements CommandExecutor {
 		kitNode.setValue(newVal);
 		//Save CONFIG
 		try {
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		} catch(IOException e) {
 		    System.out.println("[KITS]: Failed to delete kit " + name);
 		    src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
 		//Get Item Node
-		ConfigurationNode itemNode = Main.config.getNode((Object[]) ("kits.").split("\\."));
+		ConfigurationNode itemNode = Kits.config.getNode((Object[]) ("kits.").split("\\."));
 		//Remove Kit, child of itemNode
 		itemNode.removeChild(name);
 		//save config
 		try {
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		} catch(IOException e) {
 			System.out.println("[KITS]: Failed to remove kit " + name);
 			src.sendMessage(Texts.of(TextColors.DARK_RED,"Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
-		src.sendMessage(Texts.of(TextColors.GREEN,"Success! ", TextColors.YELLOW, "The kit was deleted!"));
+		src.sendMessage(Texts.of(TextColors.GREEN,"Success: ", TextColors.YELLOW, "The kit was deleted!"));
 		return CommandResult.success();
 	}
 

@@ -1,6 +1,6 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.PaginatedList;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.text.Text;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class ListCommand implements CommandCallable
 {
-	Game game = Main.game;
+	Game game = Kits.game;
 
 	List<String> suggestions = new ArrayList<String>();
 	private final Optional<Text> desc = Optional.of((Text) Texts.of("This command enables users to view all the kits avaliable!"));
@@ -41,7 +41,7 @@ public class ListCommand implements CommandCallable
 			}
 			catch (NumberFormatException e)
 			{
-				src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "Format: /kits <page number>"));
+				src.sendMessage(Texts.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "Format: /kits <page number>"));
 			}
 		}
 		// Add List
@@ -50,7 +50,7 @@ public class ListCommand implements CommandCallable
 		{
 			pgNo = 1;
 		}
-		for (String name : Main.allKits)
+		for (String name : Kits.allKits)
 		{
 			Text item = Texts.builder(name)
 				.onClick(TextActions.runCommand("/kit " + name))

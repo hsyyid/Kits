@@ -1,6 +1,6 @@
 package io.github.hsyyid.kits.utils;
 
-import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.Kits;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -19,14 +19,14 @@ public class Utils
 	// Must use Main.config, so that whole config saves - rather than overwriting it!
 	public static void addItem(String kitName, String item)
 	{
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		ConfigurationNode valueNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
 		String items = valueNode.getString();
 		String formattedItem = (item + ",");
 		valueNode.setValue(items + formattedItem);
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
@@ -38,37 +38,37 @@ public class Utils
 	// Adds Kit + an Item to the Config!
 	public static void addKit(String kitName, String item)
 	{
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-		ConfigurationNode kitNode = Main.config.getNode((Object[]) ("kits.kits").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		ConfigurationNode kitNode = Kits.config.getNode((Object[]) ("kits.kits").split("\\."));
 		String kits = kitNode.getString();
 		String formattedKitName = (kitName + ",");
 		kitNode.setValue(kits + formattedKitName);
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
 		{
 			System.out.println("[KITS]: Failed to add kit " + kitName);
 		}
-		ConfigurationNode itemNode = Main.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
+		ConfigurationNode itemNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
 		String formattedItemName = (item + ",");
 		itemNode.setValue(formattedItemName);
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
 		{
 			System.out.println("[KITS]: Failed to add " + item + " to kit " + kitName);
 		}
-		ConfigurationNode intervalNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		ConfigurationNode intervalNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		intervalNode.setValue(30000);
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
@@ -82,11 +82,11 @@ public class Utils
 	{
 		final UUID userName = playerName;
 		final String kit = kitName;
-		Game game = Main.game;
+		Game game = Kits.game;
 		SchedulerService scheduler = game.getScheduler();
 		TaskBuilder taskBuilder = scheduler.createTaskBuilder();
 		String name = playerName.toString();
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
 		if(Utils.getInterval(kitName) instanceof Integer)
 		{
 			int interval = (Integer) Utils.getInterval(kitName);
@@ -96,11 +96,11 @@ public class Utils
 				{
 					public void run()
 					{
-						ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-						Main.config.getNode("players", userName.toString(), kit, "usable").setValue("true");
+						ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+						Kits.config.getNode("players", userName.toString(), kit, "usable").setValue("true");
 						try
 						{
-							configManager.save(Main.config);
+							configManager.save(Kits.config);
 							configManager.load();
 						}
 						catch (IOException e)
@@ -112,10 +112,10 @@ public class Utils
 			}
 			else
 			{
-				Main.config.getNode("players", name, kitName, "usable").setValue("true");
+				Kits.config.getNode("players", name, kitName, "usable").setValue("true");
 				try
 				{
-					configManager.save(Main.config);
+					configManager.save(Kits.config);
 					configManager.load();
 				}
 				catch (IOException e)
@@ -126,11 +126,11 @@ public class Utils
 				{
 					public void run()
 					{
-						ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-						Main.config.getNode("players", userName.toString(), kit, "usable").setValue("true");
+						ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+						Kits.config.getNode("players", userName.toString(), kit, "usable").setValue("true");
 						try
 						{
-							configManager.save(Main.config);
+							configManager.save(Kits.config);
 							configManager.load();
 						}
 						catch (IOException e)
@@ -147,7 +147,7 @@ public class Utils
 	public static boolean inConfig(UUID playerName, String kitName)
 	{
 		String userName = playerName.toString();
-		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
+		ConfigurationNode valueNode = Kits.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
 		Object inConfig = valueNode.getValue();
 		if (inConfig != null)
 		{
@@ -163,7 +163,7 @@ public class Utils
 	public static boolean canUse(UUID playerName, String kitName)
 	{
 		String userName = playerName.toString();
-		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
+		ConfigurationNode valueNode = Kits.config.getNode((Object[]) ("players." + userName + "." + kitName + ".usable").split("\\."));
 		if(valueNode.getValue() == null)
 		{
 			return true;
@@ -175,12 +175,12 @@ public class Utils
 	public static void setFalse(UUID playerName, String kitName)
 	{
 		String name = playerName.toString();
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("players." + name + "." + kitName + ".usable").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		ConfigurationNode valueNode = Kits.config.getNode((Object[]) ("players." + name + "." + kitName + ".usable").split("\\."));
 		valueNode.setValue(false);
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
@@ -192,7 +192,7 @@ public class Utils
 	// Get Kit Interval
 	public static Object getInterval(String kitName)
 	{
-		ConfigurationNode valueNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		ConfigurationNode valueNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		Object val = valueNode.getValue();
 
 		if (val instanceof Boolean)
@@ -209,12 +209,12 @@ public class Utils
 	// Set Kit Interval
 	public static void setInterval(int interval, String kitName)
 	{
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-		ConfigurationNode intervalNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		ConfigurationNode intervalNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		intervalNode.setValue(interval);
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
@@ -226,18 +226,18 @@ public class Utils
 
 	public static void setInterval(String kitName, boolean oneTime)
 	{
-		ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-		ConfigurationNode intervalNode = Main.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		ConfigurationNode intervalNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		intervalNode.setValue(oneTime);
 
 		try
 		{
-			configManager.save(Main.config);
+			configManager.save(Kits.config);
 			configManager.load();
 		}
 		catch (IOException e)
 		{
-			System.out.println("[KITS]: Failed to change the interval for kit " + kitName);
+			System.out.println("[Kits]: Failed to change the interval for kit " + kitName);
 		}
 
 	}

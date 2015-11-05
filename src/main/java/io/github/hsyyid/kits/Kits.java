@@ -1,28 +1,20 @@
 package io.github.hsyyid.kits;
 
+import com.google.inject.Inject;
 import io.github.hsyyid.kits.cmds.KitAddExecutor;
 import io.github.hsyyid.kits.cmds.KitDeleteExecutor;
 import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
 import io.github.hsyyid.kits.cmds.ListCommand;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.GameRegistry;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.item.inventory.ItemStackBuilder;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
@@ -31,10 +23,15 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
-import com.google.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-@Plugin(id = "Kits", name = "Kits", version = "0.6")
-public class Main
+@Plugin(id = "Kits", name = "Kits", version = "0.7")
+public class Kits
 {
 	public static List<String> allKits = new ArrayList<String>();
 	public static ItemStackBuilder ItemBuilder = null;
@@ -60,7 +57,7 @@ public class Main
 	private ConfigurationLoader<CommentedConfigurationNode> configManager;
 
 	@Listener
-	public void onServerStart(GameStartedServerEvent event)
+	public void onServerInit(GameInitializationEvent event)
 	{
 		getLogger().info("Kits loading...");
 
@@ -178,7 +175,7 @@ public class Main
 				GenericArguments.onlyOne(GenericArguments.integer(Texts.of("number of items"))),
 				GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Texts.of("item subtype")))))
 			.executor(new KitAddExecutor())
-			.extendedDescription(Texts.of("Usage: /kit add <kit name> <item id>"))
+			.extendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
 			.build());
 
 		subcommands.put(Arrays.asList("interval"), CommandSpec.builder()
@@ -190,7 +187,7 @@ public class Main
 					GenericArguments.onlyOne(GenericArguments.integer(Texts.of("kit interval"))),
 					GenericArguments.onlyOne(GenericArguments.bool(Texts.of("one-time"))))))
 			.executor(new KitIntervalExecutor())
-			.extendedDescription(Texts.of("Usage: /kit interval <kit name> <interval|one-time>"))
+			.extendedDescription(Texts.of("To use /kit interval simply do /kit interval <kit name> <interval|one-time>"))
 			.build());
 
 		subcommands.put(Arrays.asList("delete"), CommandSpec.builder()
@@ -199,14 +196,14 @@ public class Main
 			.arguments(GenericArguments.seq(
 				GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name")))))
 			.executor(new KitDeleteExecutor())
-			.extendedDescription(Texts.of("Usage: /kit delete <kit name>"))
+			.extendedDescription(Texts.of("To use /kit delete simply do /kit delete <kit name>"))
 			.build());
 
 		subcommands.put(Arrays.asList("reload"), CommandSpec.builder()
 			.permission("kits.reload")
 			.description(Texts.of("Reload the Kits Config"))
 			.executor(new KitReloadExecutor())
-			.extendedDescription(Texts.of("Usage: /kit reload"))
+			.extendedDescription(Texts.of("To reload the config, simply do /kit reload"))
 			.build());
 
 		// Register /kit Command
@@ -221,6 +218,7 @@ public class Main
 
 		CommandService cmdService = event.getGame().getCommandDispatcher();
 		cmdService.register(this, new ListCommand(), "kits");
+		
 		getLogger().info("-----------------------------");
 		getLogger().info("Kits was made by HassanS6000!");
 		getLogger().info("Please post all errors with Kits on the Sponge Thread or on GitHub!");
@@ -244,7 +242,7 @@ public class Main
 		}
 		else
 		{
-			System.out.println("[KITS]: " + kitName + " does not exist!");
+			System.out.println("[Kits]: " + kitName + " does not exist!");
 			return null;
 		}
 	}

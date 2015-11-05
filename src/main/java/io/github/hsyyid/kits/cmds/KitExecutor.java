@@ -1,6 +1,6 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.Main;
+import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.Utils;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import org.spongepowered.api.util.command.spec.CommandExecutor;
 public class KitExecutor implements CommandExecutor
 {
 	String kit;
-	ItemStackBuilder builder = Main.ItemBuilder;
+	ItemStackBuilder builder = Kits.ItemBuilder;
 	double timeRemaining;
 
 	public KitExecutor(String kitName)
@@ -38,7 +38,7 @@ public class KitExecutor implements CommandExecutor
 
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
-		Game game = Main.game;
+		Game game = Kits.game;
 		SchedulerService scheduler = game.getScheduler();
 		TaskBuilder taskBuilder = scheduler.createTaskBuilder();
 		TaskBuilder taskBuilder2 = scheduler.createTaskBuilder();
@@ -49,13 +49,13 @@ public class KitExecutor implements CommandExecutor
 			Utils.addConfig(player.getUniqueId(), kit);
 
 			String items = "";
-			if (Main.getItems(kit) != null)
+			if (Kits.getItems(kit) != null)
 			{
-				items = Main.getItems(kit);
+				items = Kits.getItems(kit);
 			}
 			else
 			{
-				player.sendMessage(Texts.of(TextColors.RED, "Error! ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
+				player.sendMessage(Texts.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
 				return CommandResult.success();
 			}
 
@@ -97,7 +97,7 @@ public class KitExecutor implements CommandExecutor
 				// Give Player their Kit
 				for (String i : itemList)
 				{
-					game.getCommandDispatcher().process(game.getServer().getConsole(), "give" + " " + player.getName() + " " + i);
+					game.getCommandDispatcher().process(game.getServer().getConsole(), "minecraft:give" + " " + player.getName() + " " + i);
 				}
 
 				Utils.setFalse(player.getUniqueId(), kit);
@@ -111,16 +111,16 @@ public class KitExecutor implements CommandExecutor
 					{
 						public void run()
 						{
-							ConfigurationLoader<CommentedConfigurationNode> configManager = Main.getConfigManager();
-							Main.config.getNode("players", player.getUniqueId().toString(), kit, "usable").setValue("true");
+							ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+							Kits.config.getNode("players", player.getUniqueId().toString(), kit, "usable").setValue("true");
 							try
 							{
-								configManager.save(Main.config);
+								configManager.save(Kits.config);
 								configManager.load();
 							}
 							catch (IOException e)
 							{
-								System.out.println("[KITS]: Failed to save config!");
+								System.out.println("[Kits]: Failed to save config!");
 							}
 						}
 					}).delay(val, TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
