@@ -19,8 +19,7 @@ public class KitReloadExecutor implements CommandExecutor
 {
 	ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
 
-	public CommandResult execute(CommandSource src, CommandContext arg1)
-		throws CommandException
+	public CommandResult execute(CommandSource src, CommandContext arg1) throws CommandException
 	{
 		try
 		{
@@ -34,5 +33,4 @@ public class KitReloadExecutor implements CommandExecutor
 		src.sendMessage(Texts.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The config was reloaded."));
 		return CommandResult.success();
 	}
-
 }

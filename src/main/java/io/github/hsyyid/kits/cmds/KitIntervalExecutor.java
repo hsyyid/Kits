@@ -1,6 +1,6 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.utils.Utils;
+import io.github.hsyyid.kits.utils.ConfigManager;
 
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
@@ -12,8 +12,7 @@ import org.spongepowered.api.util.command.spec.CommandExecutor;
 
 public class KitIntervalExecutor implements CommandExecutor
 {
-	public CommandResult execute(CommandSource src, CommandContext args)
-		throws CommandException
+	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
 		String kitName = args.<String> getOne("kit name").get();
 		boolean oneTime = false;
@@ -31,11 +30,11 @@ public class KitIntervalExecutor implements CommandExecutor
 		// Sets the Interval
 		if(!oneTime)
 		{
-			Utils.setInterval(interval, kitName);
+			ConfigManager.setInterval(interval, kitName);
 		}
 		else if(oneTime)
 		{
-			Utils.setInterval(kitName, oneTime);
+			ConfigManager.setInterval(kitName, oneTime);
 		}
 		
 		src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The interval was changed!"));

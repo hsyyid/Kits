@@ -1,7 +1,7 @@
 package io.github.hsyyid.kits.cmds;
 
 import io.github.hsyyid.kits.Kits;
-import io.github.hsyyid.kits.utils.Utils;
+import io.github.hsyyid.kits.utils.ConfigManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import org.spongepowered.api.util.command.spec.CommandExecutor;
 public class KitExecutor implements CommandExecutor
 {
 	String kit;
-	ItemStackBuilder builder = Kits.ItemBuilder;
+	ItemStackBuilder builder = Kits.itemBuilder;
 	double timeRemaining;
 
 	public KitExecutor(String kitName)
@@ -46,7 +46,7 @@ public class KitExecutor implements CommandExecutor
 		if (src instanceof Player)
 		{
 			final Player player = (Player) src;
-			Utils.addConfig(player.getUniqueId(), kit);
+			ConfigManager.addPlayerToConfig(player.getUniqueId(), kit);
 
 			String items = "";
 			if (Kits.getItems(kit) != null)
@@ -92,7 +92,7 @@ public class KitExecutor implements CommandExecutor
 				}
 			}
 
-			if (Utils.canUse(player.getUniqueId(), kit))
+			if (ConfigManager.canUseKit(player.getUniqueId(), kit))
 			{
 				// Give Player their Kit
 				for (String i : itemList)
@@ -100,11 +100,11 @@ public class KitExecutor implements CommandExecutor
 					game.getCommandDispatcher().process(game.getServer().getConsole(), "minecraft:give" + " " + player.getName() + " " + i);
 				}
 
-				Utils.setFalse(player.getUniqueId(), kit);
+				ConfigManager.setFalse(player.getUniqueId(), kit);
 
-				if (Utils.getInterval(kit) instanceof Integer)
+				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
-					long val = (Integer) Utils.getInterval(kit);
+					long val = (Integer) ConfigManager.getInterval(kit);
 					timeRemaining = val * 0.001;
 
 					taskBuilder.execute(new Runnable()
@@ -139,14 +139,14 @@ public class KitExecutor implements CommandExecutor
 			}
 			else
 			{
-				if (Utils.getInterval(kit) instanceof Integer)
+				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
 					if (timeRemaining > 0)
 						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
 					else
 						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
 				}
-				else if (Utils.getInterval(kit) instanceof Boolean)
+				else if (ConfigManager.getInterval(kit) instanceof Boolean)
 				{
 					src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "This Kit is one-time use only!"));
 				}

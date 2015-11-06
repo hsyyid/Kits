@@ -6,7 +6,7 @@ import io.github.hsyyid.kits.cmds.KitDeleteExecutor;
 import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
-import io.github.hsyyid.kits.cmds.ListCommand;
+import io.github.hsyyid.kits.cmds.KitListExecutor;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -17,7 +17,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.item.inventory.ItemStackBuilder;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
@@ -34,12 +33,12 @@ import java.util.List;
 public class Kits
 {
 	public static List<String> allKits = new ArrayList<String>();
-	public static ItemStackBuilder ItemBuilder = null;
-	public static ConfigurationNode config = null;
-	public static ConfigurationNode intervalConfig = null;
+	public static ItemStackBuilder itemBuilder;
+	public static ConfigurationNode config;
+	public static ConfigurationNode intervalConfig;
 	public static ConfigurationLoader<CommentedConfigurationNode> configurationManager;
-	public static Game game = null;
-	
+	public static Game game;
+
 	@Inject
 	private Logger logger;
 
@@ -65,7 +64,7 @@ public class Kits
 
 		GameRegistry registry = game.getRegistry();
 		ItemStackBuilder builder = registry.createItemBuilder();
-		ItemBuilder = builder;
+		itemBuilder = builder;
 
 		// Config File
 		try
@@ -127,18 +126,17 @@ public class Kits
 				finished = true;
 			}
 		}
-		// Adding it to the other lits for the /kits command.
+
 		for (String k : kitList)
 		{
 			allKits.add(k);
 		}
 
-		// Add All Kits to Config if Not Added Already.
 		for (String k : kitList)
 		{
 			if (getItems(k) != null)
 			{
-				// DO NOTHIN
+				;
 			}
 			else
 			{
@@ -154,7 +152,6 @@ public class Kits
 			}
 		}
 
-		// Sub Commands
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
 
 		for (String k : kitList)
@@ -165,7 +162,7 @@ public class Kits
 				.executor(new KitExecutor(k))
 				.build());
 		}
-		// /kit add
+
 		subcommands.put(Arrays.asList("add"), CommandSpec.builder()
 			.permission("kits.add")
 			.description(Texts.of("Add a Kit or Item to a Kit"))
@@ -206,19 +203,23 @@ public class Kits
 			.extendedDescription(Texts.of("To reload the config, simply do /kit reload"))
 			.build());
 
-		// Register /kit Command
-		CommandSpec myCommandSpec = CommandSpec.builder()
-			.extendedDescription(Texts.of("Kits Command"))
+		CommandSpec kitCommandSpec = CommandSpec.builder()
+			.extendedDescription(Texts.of("Kit Command"))
 			.permission("kits.use")
-			// .arguments(GenericArguments.onlyOne(GenericArguments.string(Texts.of("help"))))
 			.children(subcommands)
 			.build();
 
-		game.getCommandDispatcher().register(this, myCommandSpec, "kit");
+		game.getCommandDispatcher().register(this, kitCommandSpec, "kit");
 
-		CommandService cmdService = event.getGame().getCommandDispatcher();
-		cmdService.register(this, new ListCommand(), "kits");
-		
+		CommandSpec kitsCommandSpec = CommandSpec.builder()
+			.extendedDescription(Texts.of("Kits List Command"))
+			.arguments(GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Texts.of("page number")))))
+			.executor(new KitListExecutor())
+			.permission("kits.list")
+			.build();
+
+		game.getCommandDispatcher().register(this, kitsCommandSpec, "kits");
+
 		getLogger().info("-----------------------------");
 		getLogger().info("Kits was made by HassanS6000!");
 		getLogger().info("Please post all errors with Kits on the Sponge Thread or on GitHub!");

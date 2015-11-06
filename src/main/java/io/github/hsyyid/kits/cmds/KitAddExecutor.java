@@ -1,8 +1,7 @@
 package io.github.hsyyid.kits.cmds;
 
 import io.github.hsyyid.kits.Kits;
-import io.github.hsyyid.kits.utils.Utils;
-
+import io.github.hsyyid.kits.utils.ConfigManager;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
@@ -11,44 +10,40 @@ import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 
-public class KitAddExecutor implements CommandExecutor {
-	
-	public CommandResult execute(CommandSource src, CommandContext args)
-			throws CommandException {
-		String name = args.<String>getOne("kit name").get();
-		String item = args.<String>getOne("item").get();
-		String noOfItems = "";
-		int numberOfItem = args.<Integer>getOne("number of items").get();
-		noOfItems = Integer.toString(numberOfItem);
-		int subtype = 0;
-		boolean isType = false;
-		try{
-			subtype = args.<Integer>getOne("item subtype").get();
-			isType = true;
-		}catch(IllegalStateException e){
-			//do notin
-		}
+import java.util.Optional;
 
-		
-		//String Items is Purely to Check if the Kit Exists or Not
+public class KitAddExecutor implements CommandExecutor
+{
+	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
+	{
+		String name = args.<String> getOne("kit name").get();
+		String item = args.<String> getOne("item").get();
+		int numberOfItem = args.<Integer> getOne("number of items").get();
+		Optional<Integer> subtype = args.<Integer> getOne("item subtype");
+
 		String items = Kits.getItems(name);
+		String fullCmd = "";
 		
-		//Adds the Command with noOfItems.
-		String fullCmd = ""; 
-		if(isType){
-		  	fullCmd = (item + " " + noOfItems + " " + subtype);
+		if (subtype.isPresent())
+		{
+			fullCmd = (item + " " + numberOfItem + " " + subtype.get());
 		}
-		else{
-			fullCmd = (item + " " + noOfItems);
+		else
+		{
+			fullCmd = (item + " " + numberOfItem);
 		}
-		if(items != null){
-			Utils.addItem(name, fullCmd);
-			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The item was added to kit " + name));
+		
+		if (items != null)
+		{
+			ConfigManager.addItemToKit(name, fullCmd);
+			src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The item was added to kit " + name));
 		}
-		else{
-			Utils.addKit(name, fullCmd);
-			src.sendMessage(Texts.of(TextColors.GOLD,"Success! ", TextColors.YELLOW, "The kit was added! ", TextColors.DARK_GRAY, "Don't forget to reboot the server for the kit to show up!"));
+		else
+		{
+			ConfigManager.addKit(name, fullCmd);
+			src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The kit was added! ", TextColors.DARK_GRAY, "Don't forget to reboot the server for the kit to show up!"));
 		}
+		
 		return CommandResult.success();
 	}
 
