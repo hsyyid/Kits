@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Plugin(id = "Kits", name = "Kits", version = "0.8")
+@Plugin(id = "Kits", name = "Kits", version = "0.9")
 public class Kits
 {
 	public static List<String> allKits = new ArrayList<String>();
@@ -63,7 +63,7 @@ public class Kits
 		game = event.getGame();
 
 		GameRegistry registry = game.getRegistry();
-		ItemStackBuilder builder = registry.createItemBuilder();
+		ItemStackBuilder builder = registry.createBuilder(ItemStackBuilder.class);
 		itemBuilder = builder;
 
 		// Config File
