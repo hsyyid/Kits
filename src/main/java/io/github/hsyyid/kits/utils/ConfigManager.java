@@ -1,18 +1,16 @@
 package io.github.hsyyid.kits.utils;
 
 import io.github.hsyyid.kits.Kits;
+import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.Game;
+import org.spongepowered.api.service.scheduler.SchedulerService;
+import org.spongepowered.api.service.scheduler.Task;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-
-import org.spongepowered.api.Game;
-import org.spongepowered.api.service.scheduler.SchedulerService;
-import org.spongepowered.api.service.scheduler.TaskBuilder;
 
 public class ConfigManager
 {
@@ -82,7 +80,7 @@ public class ConfigManager
 		final String kit = kitName;
 		Game game = Kits.game;
 		SchedulerService scheduler = game.getScheduler();
-		TaskBuilder taskBuilder = scheduler.createTaskBuilder();
+		Task.Builder taskBuilder = scheduler.createTaskBuilder();
 		String name = playerName.toString();
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
 		if (ConfigManager.getInterval(kitName) instanceof Integer)

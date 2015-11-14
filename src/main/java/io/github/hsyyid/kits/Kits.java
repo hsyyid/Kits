@@ -5,8 +5,8 @@ import io.github.hsyyid.kits.cmds.KitAddExecutor;
 import io.github.hsyyid.kits.cmds.KitDeleteExecutor;
 import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
-import io.github.hsyyid.kits.cmds.KitReloadExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
+import io.github.hsyyid.kits.cmds.KitReloadExecutor;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -15,7 +15,7 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.GameRegistry;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.item.inventory.ItemStackBuilder;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.text.Texts;
@@ -33,7 +33,7 @@ import java.util.List;
 public class Kits
 {
 	public static List<String> allKits = new ArrayList<String>();
-	public static ItemStackBuilder itemBuilder;
+	public static ItemStack.Builder itemBuilder;
 	public static ConfigurationNode config;
 	public static ConfigurationNode intervalConfig;
 	public static ConfigurationLoader<CommentedConfigurationNode> configurationManager;
@@ -63,8 +63,7 @@ public class Kits
 		game = event.getGame();
 
 		GameRegistry registry = game.getRegistry();
-		ItemStackBuilder builder = registry.createBuilder(ItemStackBuilder.class);
-		itemBuilder = builder;
+		itemBuilder = registry.createBuilder(ItemStack.Builder.class);
 
 		// Config File
 		try

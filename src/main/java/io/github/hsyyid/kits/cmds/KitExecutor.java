@@ -2,19 +2,13 @@ package io.github.hsyyid.kits.cmds;
 
 import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.ConfigManager;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.inventory.ItemStackBuilder;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.service.scheduler.SchedulerService;
-import org.spongepowered.api.service.scheduler.TaskBuilder;
+import org.spongepowered.api.service.scheduler.Task;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
@@ -25,10 +19,14 @@ import org.spongepowered.api.util.command.source.CommandBlockSource;
 import org.spongepowered.api.util.command.source.ConsoleSource;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 public class KitExecutor implements CommandExecutor
 {
 	String kit;
-	ItemStackBuilder builder = Kits.itemBuilder;
+	ItemStack.Builder builder = Kits.itemBuilder;
 	double timeRemaining;
 
 	public KitExecutor(String kitName)
@@ -40,8 +38,8 @@ public class KitExecutor implements CommandExecutor
 	{
 		Game game = Kits.game;
 		SchedulerService scheduler = game.getScheduler();
-		TaskBuilder taskBuilder = scheduler.createTaskBuilder();
-		TaskBuilder taskBuilder2 = scheduler.createTaskBuilder();
+		Task.Builder taskBuilder = scheduler.createTaskBuilder();
+		Task.Builder taskBuilder2 = scheduler.createTaskBuilder();
 
 		if (src instanceof Player)
 		{
