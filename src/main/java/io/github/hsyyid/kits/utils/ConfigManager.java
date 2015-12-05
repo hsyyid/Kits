@@ -5,8 +5,8 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.Game;
-import org.spongepowered.api.service.scheduler.SchedulerService;
-import org.spongepowered.api.service.scheduler.Task;
+import org.spongepowered.api.scheduler.Scheduler;
+import org.spongepowered.api.scheduler.Task;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -79,7 +79,7 @@ public class ConfigManager
 		final UUID userName = playerName;
 		final String kit = kitName;
 		Game game = Kits.game;
-		SchedulerService scheduler = game.getScheduler();
+		Scheduler scheduler = game.getScheduler();
 		Task.Builder taskBuilder = scheduler.createTaskBuilder();
 		String name = playerName.toString();
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();

@@ -5,19 +5,19 @@ import io.github.hsyyid.kits.utils.ConfigManager;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.source.CommandBlockSource;
+import org.spongepowered.api.command.source.ConsoleSource;
+import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.service.scheduler.SchedulerService;
-import org.spongepowered.api.service.scheduler.Task;
+import org.spongepowered.api.scheduler.Scheduler;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.util.command.CommandException;
-import org.spongepowered.api.util.command.CommandResult;
-import org.spongepowered.api.util.command.CommandSource;
-import org.spongepowered.api.util.command.args.CommandContext;
-import org.spongepowered.api.util.command.source.CommandBlockSource;
-import org.spongepowered.api.util.command.source.ConsoleSource;
-import org.spongepowered.api.util.command.spec.CommandExecutor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class KitExecutor implements CommandExecutor
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
 		Game game = Kits.game;
-		SchedulerService scheduler = game.getScheduler();
+		Scheduler scheduler = game.getScheduler();
 		Task.Builder taskBuilder = scheduler.createTaskBuilder();
 		Task.Builder taskBuilder2 = scheduler.createTaskBuilder();
 
@@ -95,7 +95,7 @@ public class KitExecutor implements CommandExecutor
 				// Give Player their Kit
 				for (String i : itemList)
 				{
-					game.getCommandDispatcher().process(game.getServer().getConsole(), "minecraft:give" + " " + player.getName() + " " + i);
+					game.getCommandManager().process(game.getServer().getConsole(), "minecraft:give" + " " + player.getName() + " " + i);
 				}
 
 				ConfigManager.setFalse(player.getUniqueId(), kit);

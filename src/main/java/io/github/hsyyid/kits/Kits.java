@@ -13,14 +13,14 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.GameRegistry;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.text.Texts;
-import org.spongepowered.api.util.command.args.GenericArguments;
-import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import java.io.File;
 import java.io.IOException;
@@ -208,7 +208,7 @@ public class Kits
 			.children(subcommands)
 			.build();
 
-		game.getCommandDispatcher().register(this, kitCommandSpec, "kit");
+		game.getCommandManager().register(this, kitCommandSpec, "kit");
 
 		CommandSpec kitsCommandSpec = CommandSpec.builder()
 			.extendedDescription(Texts.of("Kits List Command"))
@@ -217,7 +217,7 @@ public class Kits
 			.permission("kits.list")
 			.build();
 
-		game.getCommandDispatcher().register(this, kitsCommandSpec, "kits");
+		game.getCommandManager().register(this, kitsCommandSpec, "kits");
 
 		getLogger().info("-----------------------------");
 		getLogger().info("Kits was made by HassanS6000!");
