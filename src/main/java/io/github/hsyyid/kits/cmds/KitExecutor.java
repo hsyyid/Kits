@@ -121,7 +121,7 @@ public class KitExecutor implements CommandExecutor
 								System.out.println("[Kits]: Failed to save config!");
 							}
 						}
-					}).delay(val, TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
+					}).delay(val, TimeUnit.MILLISECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 
 					taskBuilder2.execute(new Runnable()
 					{
@@ -132,7 +132,7 @@ public class KitExecutor implements CommandExecutor
 								timeRemaining = timeRemaining - 1;
 							}
 						}
-					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
+					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 				}
 			}
 			else

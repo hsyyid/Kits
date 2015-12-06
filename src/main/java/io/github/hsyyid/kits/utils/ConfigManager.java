@@ -104,7 +104,7 @@ public class ConfigManager
 							System.out.println("[Kits]: Failed to save config!");
 						}
 					}
-				}).delay(interval, TimeUnit.MILLISECONDS).name("Kits - Sets Value").submit(game.getPluginManager().getPlugin("Kits").get());
+				}).delay(interval, TimeUnit.MILLISECONDS).name("Kits - Sets Value").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 			}
 			else
 			{
@@ -134,7 +134,7 @@ public class ConfigManager
 							System.out.println("[Kits]: Failed to save config!");
 						}
 					}
-				}).delay(interval, TimeUnit.MILLISECONDS).name("Kits - Sets Val Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance());
+				}).delay(interval, TimeUnit.MILLISECONDS).name("Kits - Sets Val Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 			}
 		}
 	}
