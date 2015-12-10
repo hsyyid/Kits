@@ -33,7 +33,7 @@ public class KitDeleteExecutor implements CommandExecutor
 		}
 		catch (IOException e)
 		{
-			System.out.println("[KITS]: Failed to delete kit " + name);
+			System.out.println("[Kits]: Failed to delete kit " + name);
 			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
 
@@ -47,7 +47,7 @@ public class KitDeleteExecutor implements CommandExecutor
 		}
 		catch (IOException e)
 		{
-			System.out.println("[KITS]: Failed to remove kit " + name);
+			System.out.println("[Kits]: Failed to remove kit " + name);
 			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
 		
