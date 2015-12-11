@@ -103,7 +103,7 @@ public class KitExecutor implements CommandExecutor
 				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
 					long val = (Integer) ConfigManager.getInterval(kit);
-					timeRemaining = val * 0.001;
+					timeRemaining = val;
 
 					taskBuilder.execute(new Runnable()
 					{
