@@ -47,6 +47,7 @@ public class KitExecutor implements CommandExecutor
 			ConfigManager.addPlayerToConfig(player.getUniqueId(), kit);
 
 			String items = "";
+			
 			if (Kits.getItems(kit) != null)
 			{
 				items = Kits.getItems(kit);
