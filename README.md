@@ -4,7 +4,8 @@ Kits
 **Currently not stable and under heavy development**
 
 A minecraft plugin for Sponge platforms.
-Contains many essential commands, features and other useful goodies.
+Adds the ability to create Kits, which users can
+easily access.
 
 
 ## Links ##
@@ -21,7 +22,6 @@ This means that you are allowed to code in any way you would like.
 * [Java] 8
 
 ## Contributing ##
-I really appreciate if people contribute to the project.
 I have a general set of [rules] I follow for my projects.
 Do read through it if you do plan on contributing.
 
