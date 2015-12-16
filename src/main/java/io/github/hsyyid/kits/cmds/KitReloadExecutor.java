@@ -21,7 +21,7 @@ public class KitReloadExecutor implements CommandExecutor
 	{
 		try
 		{
-			configManager.load();
+			Kits.config = configManager.load();
 		}
 		catch (IOException e)
 		{
