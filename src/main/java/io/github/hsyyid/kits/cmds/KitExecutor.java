@@ -2,9 +2,8 @@ package io.github.hsyyid.kits.cmds;
 
 import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.ConfigManager;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -13,33 +12,26 @@ import org.spongepowered.api.command.source.CommandBlockSource;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.scheduler.Scheduler;
-import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class KitExecutor implements CommandExecutor
 {
-	String kit;
-	ItemStack.Builder builder = Kits.itemBuilder;
-	double timeRemaining;
+	private String kit;
 
-	public KitExecutor(String kitName)
+	public KitExecutor(String kit)
 	{
-		kit = kitName;
+		this.kit = kit;
 	}
 
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
 		Game game = Kits.game;
-		Scheduler scheduler = game.getScheduler();
-		Task.Builder taskBuilder = scheduler.createTaskBuilder();
-		Task.Builder taskBuilder2 = scheduler.createTaskBuilder();
+		Scheduler scheduler = Sponge.getGame().getScheduler();
 
 		if (src instanceof Player)
 		{
@@ -104,34 +96,21 @@ public class KitExecutor implements CommandExecutor
 				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
 					long val = (Integer) ConfigManager.getInterval(kit);
-					timeRemaining = val;
+					ConfigManager.setTimeRemaining(player, kit, val);
 
-					taskBuilder.execute(new Runnable()
+					scheduler.createTaskBuilder().execute(new Runnable()
 					{
 						public void run()
 						{
-							ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
-							Kits.config.getNode("players", player.getUniqueId().toString(), kit, "usable").setValue("true");
-							try
-							{
-								configManager.save(Kits.config);
-								configManager.load();
-							}
-							catch (IOException e)
-							{
-								System.out.println("[Kits]: Failed to save config!");
-							}
+							ConfigManager.setTrue(player, kit);
 						}
 					}).delay(val, TimeUnit.SECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 
-					taskBuilder2.execute(new Runnable()
+					scheduler.createTaskBuilder().execute(new Runnable()
 					{
 						public void run()
 						{
-							if (timeRemaining > 0)
-							{
-								timeRemaining = timeRemaining - 1;
-							}
+							ConfigManager.setTimeRemaining(player, kit, ConfigManager.getTimeRemaining(player, kit) - 1);
 						}
 					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 				}
@@ -140,8 +119,8 @@ public class KitExecutor implements CommandExecutor
 			{
 				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
-					if (timeRemaining > 0)
-						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + timeRemaining + " seconds before using this Kit again!"));
+					if (ConfigManager.getTimeRemaining(player, kit) > 0)
+						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player, kit) + " seconds before using this Kit again!"));
 					else
 						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
 				}

@@ -5,6 +5,7 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 
@@ -14,6 +15,46 @@ import java.util.concurrent.TimeUnit;
 
 public class ConfigManager
 {
+	public static void setTrue(Player player, String kit)
+	{
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		Kits.config.getNode("players", player.getUniqueId().toString(), kit, "usable").setValue("true");
+		try
+		{
+			configManager.save(Kits.config);
+			configManager.load();
+		}
+		catch (IOException e)
+		{
+			System.out.println("[Kits]: Failed to save config!");
+		}
+	}
+
+	public static double getTimeRemaining(Player player, String kit)
+	{
+		ConfigurationNode node = Kits.config.getNode("players", player.getUniqueId().toString(), kit, "time");
+		if (node.getValue() == null)
+			return 0;
+		else
+			return node.getDouble();
+	}
+
+	public static void setTimeRemaining(Player player, String kit, double timeRemaining)
+	{
+		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
+		Kits.config.getNode("players", player.getUniqueId().toString(), kit, "time", timeRemaining);
+		
+		try
+		{
+			configManager.save(Kits.config);
+			configManager.load();
+		}
+		catch (IOException e)
+		{
+			System.out.println("[Kits]: Failed to save config!");
+		}
+	}
+	
 	public static void addItemToKit(String kitName, String item)
 	{
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
@@ -39,7 +80,7 @@ public class ConfigManager
 		String kits = kitNode.getString();
 		String formattedKitName = (kitName + ",");
 		kitNode.setValue(kits + formattedKitName);
-		
+
 		try
 		{
 			configManager.save(Kits.config);
@@ -204,7 +245,7 @@ public class ConfigManager
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
 		ConfigurationNode intervalNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".interval").split("\\."));
 		intervalNode.setValue(interval);
-		
+
 		try
 		{
 			configManager.save(Kits.config);
