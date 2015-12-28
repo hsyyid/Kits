@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Plugin(id = "Kits", name = "Kits", version = "1.0")
+@Plugin(id = "Kits", name = "Kits", version = "1.1")
 public class Kits
 {
 	public static List<String> allKits = new ArrayList<String>();
