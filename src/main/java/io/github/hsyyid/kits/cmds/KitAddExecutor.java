@@ -1,6 +1,5 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.ConfigManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -10,6 +9,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 
+import java.util.List;
 import java.util.Optional;
 
 public class KitAddExecutor implements CommandExecutor
@@ -21,7 +21,7 @@ public class KitAddExecutor implements CommandExecutor
 		int numberOfItem = args.<Integer> getOne("number of items").get();
 		Optional<Integer> subtype = args.<Integer> getOne("item subtype");
 
-		String items = Kits.getItems(name);
+		List<String> items = ConfigManager.getItems(name);
 		String fullCmd = "";
 
 		if (subtype.isPresent())
@@ -33,7 +33,7 @@ public class KitAddExecutor implements CommandExecutor
 			fullCmd = (item + " " + numberOfItem);
 		}
 
-		if (items != null)
+		if (items.size() > 0)
 		{
 			ConfigManager.addItemToKit(name, fullCmd);
 			src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The item was added to kit " + name));

@@ -33,7 +33,7 @@ public class KitIntervalExecutor implements CommandExecutor
 		}
 		else if(oneTime)
 		{
-			ConfigManager.setInterval(kitName, oneTime);
+			ConfigManager.setInterval(oneTime, kitName);
 		}
 		
 		src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The interval was changed!"));

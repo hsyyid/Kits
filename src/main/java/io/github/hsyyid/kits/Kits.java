@@ -7,6 +7,7 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
+import io.github.hsyyid.kits.utils.ConfigManager;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -75,7 +76,7 @@ public class Kits
 				config = configManager.load();
 				config.getNode("kits", "kits").setValue("default,");
 				config.getNode("kits", "default", "item").setValue("diamond_axe,");
-				config.getNode("kits", "default", "interval").setValue(30000);
+				config.getNode("kits", "default", "interval").setValue(300);
 				configManager.save(config);
 			}
 			configurationManager = configManager;
@@ -134,13 +135,14 @@ public class Kits
 
 		for (String k : kitList)
 		{
-			if (getItems(k) != null)
+			if (ConfigManager.getItems(k).size() == 0)
 			{
 				;
 			}
 			else
 			{
-				config.getNode("kits", k, "item").setValue("diamond_axe");
+				config.getNode("kits", k, "item").setValue("diamond_axe,");
+				
 				try
 				{
 					configManager.save(config);
@@ -231,20 +233,5 @@ public class Kits
 	public static ConfigurationLoader<CommentedConfigurationNode> getConfigManager()
 	{
 		return configurationManager;
-	}
-
-	public static String getItems(String kitName)
-	{
-		ConfigurationNode valueNode = config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
-		String items = valueNode.getString();
-		if (items != null)
-		{
-			return items;
-		}
-		else
-		{
-			System.out.println("[Kits]: " + kitName + " does not exist!");
-			return null;
-		}
 	}
 }

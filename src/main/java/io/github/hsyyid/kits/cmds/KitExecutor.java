@@ -13,10 +13,11 @@ import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Scheduler;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class KitExecutor implements CommandExecutor
@@ -36,57 +37,22 @@ public class KitExecutor implements CommandExecutor
 		if (src instanceof Player)
 		{
 			final Player player = (Player) src;
-			ConfigManager.addPlayerToConfig(player.getUniqueId(), kit);
 
-			String items = "";
-			
-			if (Kits.getItems(kit) != null)
-			{
-				items = Kits.getItems(kit);
-			}
-			else
+			if (!ConfigManager.isPlayerInConfig(player.getUniqueId(), kit))
+				ConfigManager.addPlayerToConfig(player.getUniqueId(), kit);
+
+			List<String> items = ConfigManager.getItems(kit);
+
+			if (items.size() == 0)
 			{
 				player.sendMessage(Texts.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
 				return CommandResult.success();
 			}
 
-			boolean finished = false;
-			ArrayList<String> itemList = new ArrayList<String>();
-
-			if (finished != true)
-			{
-				int endIndex = items.indexOf(",");
-				if (endIndex != -1)
-				{
-					String substring = items.substring(0, endIndex);
-					itemList.add(substring);
-
-					while (finished != true)
-					{
-						int startIndex = endIndex;
-						endIndex = items.indexOf(",", startIndex + 1);
-						if (endIndex != -1)
-						{
-							String substrings = items.substring(startIndex + 1, endIndex);
-							itemList.add(substrings);
-						}
-						else
-						{
-							finished = true;
-						}
-					}
-				}
-				else
-				{
-					itemList.add(items);
-					finished = true;
-				}
-			}
-
 			if (ConfigManager.canUseKit(player.getUniqueId(), kit))
 			{
 				// Give Player their Kit
-				for (String i : itemList)
+				for (String i : items)
 				{
 					game.getCommandManager().process(game.getServer().getConsole(), "minecraft:give" + " " + player.getName() + " " + i);
 				}
@@ -98,21 +64,23 @@ public class KitExecutor implements CommandExecutor
 					long val = (Integer) ConfigManager.getInterval(kit);
 					ConfigManager.setTimeRemaining(player, kit, val);
 
-					scheduler.createTaskBuilder().execute(new Runnable()
+					final Task updateTask = scheduler.createTaskBuilder().execute(new Runnable()
 					{
 						public void run()
 						{
-							ConfigManager.setTrue(player, kit);
+							if (ConfigManager.getTimeRemaining(player, kit) > 0)
+								ConfigManager.setTimeRemaining(player, kit, ConfigManager.getTimeRemaining(player, kit) - 1);
 						}
-					}).delay(val, TimeUnit.SECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
+					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 
 					scheduler.createTaskBuilder().execute(new Runnable()
 					{
 						public void run()
 						{
-							ConfigManager.setTimeRemaining(player, kit, ConfigManager.getTimeRemaining(player, kit) - 1);
+							ConfigManager.setTrue(player, kit);
+							Sponge.getScheduler().getScheduledTasks().remove(updateTask);
 						}
-					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
+					}).delay(val, TimeUnit.SECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 				}
 			}
 			else
