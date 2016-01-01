@@ -1,4 +1,4 @@
-Kits
+Kits [![Build Status](https://travis-ci.org/hsyyid/Kits.svg)](https://travis-ci.org/hsyyid/Kits)
 =============
 
 **Currently not stable and under heavy development**
