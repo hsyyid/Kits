@@ -22,7 +22,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -160,53 +160,53 @@ public class Kits
 		{
 			subcommands.put(Arrays.asList(k), CommandSpec.builder()
 				.permission("kits.use." + k)
-				.description(Texts.of("Kit " + k))
+				.description(Text.of("Kit " + k))
 				.executor(new KitExecutor(k))
 				.build());
 		}
 
 		subcommands.put(Arrays.asList("add"), CommandSpec.builder()
 			.permission("kits.add")
-			.description(Texts.of("Add a Kit or Item to a Kit"))
+			.description(Text.of("Add a Kit or Item to a Kit"))
 			.arguments(GenericArguments.seq(
-				GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
-				GenericArguments.onlyOne(GenericArguments.string(Texts.of("item")))),
-				GenericArguments.onlyOne(GenericArguments.integer(Texts.of("number of items"))),
-				GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Texts.of("item subtype")))))
+				GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name"))),
+				GenericArguments.onlyOne(GenericArguments.string(Text.of("item")))),
+				GenericArguments.onlyOne(GenericArguments.integer(Text.of("number of items"))),
+				GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Text.of("item subtype")))))
 			.executor(new KitAddExecutor())
-			.extendedDescription(Texts.of("To use /kit add please do /kit add <kit name> <item id>"))
+			.extendedDescription(Text.of("To use /kit add please do /kit add <kit name> <item id>"))
 			.build());
 
 		subcommands.put(Arrays.asList("interval"), CommandSpec.builder()
 			.permission("kits.interval")
-			.description(Texts.of("Change a Kit's Interval"))
+			.description(Text.of("Change a Kit's Interval"))
 			.arguments(GenericArguments.seq(
-				GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name"))),
+				GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name"))),
 				GenericArguments.firstParsing(
-					GenericArguments.onlyOne(GenericArguments.integer(Texts.of("kit interval"))),
-					GenericArguments.onlyOne(GenericArguments.bool(Texts.of("one-time"))))))
+					GenericArguments.onlyOne(GenericArguments.integer(Text.of("kit interval"))),
+					GenericArguments.onlyOne(GenericArguments.bool(Text.of("one-time"))))))
 			.executor(new KitIntervalExecutor())
-			.extendedDescription(Texts.of("To use /kit interval simply do /kit interval <kit name> <interval|one-time>"))
+			.extendedDescription(Text.of("To use /kit interval simply do /kit interval <kit name> <interval|one-time>"))
 			.build());
 
 		subcommands.put(Arrays.asList("delete"), CommandSpec.builder()
 			.permission("kits.delete")
-			.description(Texts.of("Delete a Kit from the Config"))
+			.description(Text.of("Delete a Kit from the Config"))
 			.arguments(GenericArguments.seq(
-				GenericArguments.onlyOne(GenericArguments.string(Texts.of("kit name")))))
+				GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name")))))
 			.executor(new KitDeleteExecutor())
-			.extendedDescription(Texts.of("To use /kit delete simply do /kit delete <kit name>"))
+			.extendedDescription(Text.of("To use /kit delete simply do /kit delete <kit name>"))
 			.build());
 
 		subcommands.put(Arrays.asList("reload"), CommandSpec.builder()
 			.permission("kits.reload")
-			.description(Texts.of("Reload the Kits Config"))
+			.description(Text.of("Reload the Kits Config"))
 			.executor(new KitReloadExecutor())
-			.extendedDescription(Texts.of("To reload the config, simply do /kit reload"))
+			.extendedDescription(Text.of("To reload the config, simply do /kit reload"))
 			.build());
 
 		CommandSpec kitCommandSpec = CommandSpec.builder()
-			.extendedDescription(Texts.of("Kit Command"))
+			.extendedDescription(Text.of("Kit Command"))
 			.permission("kits.use")
 			.children(subcommands)
 			.build();
@@ -214,8 +214,8 @@ public class Kits
 		game.getCommandManager().register(this, kitCommandSpec, "kit");
 
 		CommandSpec kitsCommandSpec = CommandSpec.builder()
-			.extendedDescription(Texts.of("Kits List Command"))
-			.arguments(GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Texts.of("page number")))))
+			.extendedDescription(Text.of("Kits List Command"))
+			.arguments(GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Text.of("page number")))))
 			.executor(new KitListExecutor())
 			.permission("kits.list")
 			.build();

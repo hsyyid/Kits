@@ -14,7 +14,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class KitExecutor implements CommandExecutor
 
 			if (items.size() == 0)
 			{
-				player.sendMessage(Texts.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
+				player.sendMessage(Text.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
 				return CommandResult.success();
 			}
 
@@ -88,23 +88,23 @@ public class KitExecutor implements CommandExecutor
 				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
 					if (ConfigManager.getTimeRemaining(player, kit) > 0)
-						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player, kit) + " seconds before using this Kit again!"));
+						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player, kit) + " seconds before using this Kit again!"));
 					else
-						src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
+						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
 				}
 				else if (ConfigManager.getInterval(kit) instanceof Boolean)
 				{
-					src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "This Kit is one-time use only!"));
+					src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "This Kit is one-time use only!"));
 				}
 			}
 		}
 		else if (src instanceof ConsoleSource)
 		{
-			src.sendMessage(Texts.of("Must be an in-game player to use /kit!"));
+			src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
 		}
 		else if (src instanceof CommandBlockSource)
 		{
-			src.sendMessage(Texts.of("Must be an in-game player to use /kit!"));
+			src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
 		}
 
 		return CommandResult.success();

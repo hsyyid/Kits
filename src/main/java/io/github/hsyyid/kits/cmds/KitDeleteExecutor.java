@@ -9,7 +9,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class KitDeleteExecutor implements CommandExecutor
 		catch (IOException e)
 		{
 			System.out.println("[Kits]: Failed to delete kit " + name);
-			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
+			src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
 
 		ConfigurationNode itemNode = Kits.config.getNode((Object[]) ("kits.").split("\\."));
@@ -48,10 +48,10 @@ public class KitDeleteExecutor implements CommandExecutor
 		catch (IOException e)
 		{
 			System.out.println("[Kits]: Failed to remove kit " + name);
-			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
+			src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
 		
-		src.sendMessage(Texts.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The kit was deleted!"));
+		src.sendMessage(Text.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The kit was deleted!"));
 		return CommandResult.success();
 	}
 }

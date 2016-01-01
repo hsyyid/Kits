@@ -8,7 +8,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.io.IOException;
@@ -25,10 +25,10 @@ public class KitReloadExecutor implements CommandExecutor
 		}
 		catch (IOException e)
 		{
-			src.sendMessage(Texts.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The config was not reloaded!"));
+			src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The config was not reloaded!"));
 		}
 
-		src.sendMessage(Texts.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The config was reloaded."));
+		src.sendMessage(Text.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The config was reloaded."));
 		return CommandResult.success();
 	}
 }

@@ -6,7 +6,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.util.List;
@@ -36,12 +36,12 @@ public class KitAddExecutor implements CommandExecutor
 		if (items.size() > 0)
 		{
 			ConfigManager.addItemToKit(name, fullCmd);
-			src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The item was added to kit " + name));
+			src.sendMessage(Text.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The item was added to kit " + name));
 		}
 		else
 		{
 			ConfigManager.addKit(name, fullCmd);
-			src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The kit was added! ", TextColors.DARK_GRAY, "Don't forget to reboot the server for the kit to show up!"));
+			src.sendMessage(Text.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The kit was added! ", TextColors.DARK_GRAY, "Don't forget to reboot the server for the kit to show up!"));
 		}
 
 		return CommandResult.success();

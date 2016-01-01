@@ -6,7 +6,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 public class KitIntervalExecutor implements CommandExecutor
@@ -36,7 +36,7 @@ public class KitIntervalExecutor implements CommandExecutor
 			ConfigManager.setInterval(oneTime, kitName);
 		}
 		
-		src.sendMessage(Texts.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The interval was changed!"));
+		src.sendMessage(Text.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The interval was changed!"));
 		return CommandResult.success();
 	}
 }

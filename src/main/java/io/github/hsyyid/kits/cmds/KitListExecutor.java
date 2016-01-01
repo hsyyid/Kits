@@ -8,8 +8,6 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextBuilder;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
@@ -34,9 +32,9 @@ public class KitListExecutor implements CommandExecutor
 			if (src.hasPermission("kits.use." + name))
 			{
 				Text item = 
-					Texts.builder(name)
+					Text.builder(name)
 						.onClick(TextActions.runCommand("/kit " + name))
-						.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Spawn kit ", TextColors.GOLD, name)))
+						.onHover(TextActions.showText(Text.of(TextColors.WHITE, "Spawn kit ", TextColors.GOLD, name)))
 						.color(TextColors.DARK_AQUA)
 						.style(TextStyles.UNDERLINE)
 						.build();
@@ -50,10 +48,10 @@ public class KitListExecutor implements CommandExecutor
 		if (pgNo > pList.getTotalPages())
 			pgNo = 1;
 
-		TextBuilder header = Texts.builder();
-		header.append(Texts.of(TextColors.GREEN, "------------"));
-		header.append(Texts.of(TextColors.GREEN, " Showing Kits page " + pgNo + " of " + pList.getTotalPages() + " "));
-		header.append(Texts.of(TextColors.GREEN, "------------"));
+		Text.Builder header = Text.builder();
+		header.append(Text.of(TextColors.GREEN, "------------"));
+		header.append(Text.of(TextColors.GREEN, " Showing Kits page " + pgNo + " of " + pList.getTotalPages() + " "));
+		header.append(Text.of(TextColors.GREEN, "------------"));
 
 		pList.setHeader(header.build());
 
