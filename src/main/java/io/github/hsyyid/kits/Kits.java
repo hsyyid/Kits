@@ -7,7 +7,6 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
-import io.github.hsyyid.kits.utils.ConfigManager;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -131,27 +130,6 @@ public class Kits
 		for (String k : kitList)
 		{
 			allKits.add(k);
-		}
-
-		for (String k : kitList)
-		{
-			if (ConfigManager.getItems(k).size() == 0)
-			{
-				;
-			}
-			else
-			{
-				config.getNode("kits", k, "item").setValue("diamond_axe,");
-				
-				try
-				{
-					configManager.save(config);
-				}
-				catch (IOException e)
-				{
-					getLogger().error("The default configuration could not be loaded or created!");
-				}
-			}
 		}
 
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
