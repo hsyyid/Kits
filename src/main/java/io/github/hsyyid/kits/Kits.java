@@ -7,6 +7,7 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
+import io.github.hsyyid.kits.utils.ConfigManager;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -87,53 +88,15 @@ public class Kits
 			getLogger().error("The default configuration could not be loaded or created!");
 		}
 
-		// Get Kit Names
-		ConfigurationNode kits = config.getNode((Object[]) "kits.kits".split("\\."));
-		String kit = kits.getString("default");
-
-		boolean finished = false;
-		// Array List to Keep all the Kits in
-		ArrayList<String> kitList = new ArrayList<String>();
-
-		// Add all kits to kitList
-		if (finished != true)
-		{
-			int endIndex = kit.indexOf(",");
-			if (endIndex != -1)
-			{
-				String substring = kit.substring(0, endIndex);
-				kitList.add(substring);
-
-				// If they Have More than 1
-				while (finished != true)
-				{
-					int startIndex = endIndex;
-					endIndex = kit.indexOf(",", startIndex + 1);
-					if (endIndex != -1)
-					{
-						String substrings = kit.substring(startIndex + 1, endIndex);
-						kitList.add(substrings);
-					}
-					else
-					{
-						finished = true;
-					}
-				}
-			}
-			else
-			{
-				kitList.add(kit);
-				finished = true;
-			}
-		}
-
+		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
+		
+		List<String> kitList = ConfigManager.getKits();
+		
 		for (String k : kitList)
 		{
-			allKits.add(k);
+			Kits.allKits.add(k);
 		}
-
-		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
-
+		
 		for (String k : kitList)
 		{
 			subcommands.put(Arrays.asList(k), CommandSpec.builder()

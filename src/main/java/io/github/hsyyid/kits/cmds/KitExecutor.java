@@ -12,12 +12,15 @@ import org.spongepowered.api.command.source.CommandBlockSource;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class KitExecutor implements CommandExecutor
@@ -54,7 +57,25 @@ public class KitExecutor implements CommandExecutor
 				// Give Player their Kit
 				for (String i : items)
 				{
-					game.getCommandManager().process(game.getServer().getConsole(), "minecraft:give" + " " + player.getName() + " " + i);
+					String id = i;
+					int quantity = 1;
+
+					if(i.contains(" "))
+					{
+						id = i.substring(0, i.indexOf(" "));
+						quantity = Integer.parseInt(i.substring(i.indexOf(" ") + 1, i.length()));
+					}
+
+					Optional<ItemType> optionalItemType = Sponge.getRegistry().getType(ItemType.class, id);
+
+					if(optionalItemType.isPresent())
+					{
+						player.getInventory().offer(Sponge.getRegistry()
+							.createBuilder(ItemStack.Builder.class)
+							.itemType(optionalItemType.get())
+							.quantity(quantity)
+							.build());
+					}
 				}
 
 				ConfigManager.setFalse(player.getUniqueId(), kit);
