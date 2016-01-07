@@ -14,7 +14,6 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -35,7 +34,6 @@ public class KitExecutor implements CommandExecutor
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
 		Game game = Kits.game;
-		Scheduler scheduler = Sponge.getGame().getScheduler();
 
 		if (src instanceof Player)
 		{
@@ -85,7 +83,7 @@ public class KitExecutor implements CommandExecutor
 					long val = (Integer) ConfigManager.getInterval(kit);
 					ConfigManager.setTimeRemaining(player, kit, val);
 
-					final Task updateTask = scheduler.createTaskBuilder().execute(new Runnable()
+					final Task updateTask = Sponge.getScheduler().createTaskBuilder().execute(new Runnable()
 					{
 						public void run()
 						{
@@ -94,12 +92,12 @@ public class KitExecutor implements CommandExecutor
 						}
 					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 
-					scheduler.createTaskBuilder().execute(new Runnable()
+					Sponge.getScheduler().createTaskBuilder().execute(new Runnable()
 					{
 						public void run()
 						{
 							ConfigManager.setTrue(player, kit);
-							Sponge.getScheduler().getScheduledTasks().remove(updateTask);
+							updateTask.cancel();
 						}
 					}).delay(val, TimeUnit.SECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
 				}
