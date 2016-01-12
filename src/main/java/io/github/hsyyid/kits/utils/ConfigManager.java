@@ -5,10 +5,10 @@ import io.github.hsyyid.kits.Kits;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.spongepowered.api.entity.living.player.Player;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class ConfigManager
@@ -54,14 +54,25 @@ public class ConfigManager
 				finished = true;
 			}
 		}
-		
+
 		return kitList;
 	}
 
-	public static void setTrue(Player player, String kit)
+	public static Set<Object> getPlayers()
+	{
+		return Kits.config.getNode("players").getChildrenMap().keySet();
+	}
+	
+	public static Set<Object> getPlayerUsedKits(UUID uuid)
+	{
+		return Kits.config.getNode("players", uuid.toString()).getChildrenMap().keySet();
+	}
+	
+	public static void setTrue(UUID uuid, String kit)
 	{
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
-		Kits.config.getNode("players", player.getUniqueId().toString(), kit, "usable").setValue(true);
+		Kits.config.getNode("players", uuid.toString(), kit, "usable").setValue(true);
+		
 		try
 		{
 			configManager.save(Kits.config);
@@ -76,7 +87,7 @@ public class ConfigManager
 	public static List<String> getItems(String kitName)
 	{
 		ConfigurationNode valueNode = Kits.config.getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
-		if(valueNode.getValue() == null)
+		if (valueNode.getValue() == null)
 			return Lists.newArrayList();
 
 		String items = valueNode.getString();
@@ -119,9 +130,9 @@ public class ConfigManager
 		return itemList;
 	}
 
-	public static double getTimeRemaining(Player player, String kit)
+	public static double getTimeRemaining(UUID uuid, String kit)
 	{
-		ConfigurationNode node = Kits.config.getNode("players", player.getUniqueId().toString(), kit, "time");
+		ConfigurationNode node = Kits.config.getNode("players", uuid.toString(), kit, "time");
 
 		if (node.getValue() == null)
 			return 0;
@@ -129,10 +140,10 @@ public class ConfigManager
 			return node.getDouble();
 	}
 
-	public static void setTimeRemaining(Player player, String kit, double timeRemaining)
+	public static void setTimeRemaining(UUID uuid, String kit, double timeRemaining)
 	{
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
-		Kits.config.getNode("players", player.getUniqueId().toString(), kit, "time").setValue(timeRemaining);
+		Kits.config.getNode("players", uuid.toString(), kit, "time").setValue(timeRemaining);
 
 		try
 		{

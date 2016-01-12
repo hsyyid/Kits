@@ -1,8 +1,7 @@
 package io.github.hsyyid.kits.cmds;
 
-import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.utils.ConfigManager;
-import org.spongepowered.api.Game;
+import io.github.hsyyid.kits.utils.Utils;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -14,13 +13,11 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 public class KitExecutor implements CommandExecutor
 {
@@ -33,8 +30,6 @@ public class KitExecutor implements CommandExecutor
 
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
-		Game game = Kits.game;
-
 		if (src instanceof Player)
 		{
 			final Player player = (Player) src;
@@ -77,37 +72,21 @@ public class KitExecutor implements CommandExecutor
 				}
 
 				ConfigManager.setFalse(player.getUniqueId(), kit);
-
+				
 				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
 					long val = (Integer) ConfigManager.getInterval(kit);
-					ConfigManager.setTimeRemaining(player, kit, val);
-
-					final Task updateTask = Sponge.getScheduler().createTaskBuilder().execute(new Runnable()
-					{
-						public void run()
-						{
-							if (ConfigManager.getTimeRemaining(player, kit) > 0)
-								ConfigManager.setTimeRemaining(player, kit, ConfigManager.getTimeRemaining(player, kit) - 1);
-						}
-					}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
-
-					Sponge.getScheduler().createTaskBuilder().execute(new Runnable()
-					{
-						public void run()
-						{
-							ConfigManager.setTrue(player, kit);
-							updateTask.cancel();
-						}
-					}).delay(val, TimeUnit.SECONDS).name("Kits - Sets Value Back to True").submit(game.getPluginManager().getPlugin("Kits").get().getInstance().get());
+					ConfigManager.setTimeRemaining(player.getUniqueId(), kit, val);
+					Utils.scheduleUpdateTask(player.getUniqueId(), kit);
+					Utils.scheduleValueChangeTask(player.getUniqueId(), kit, val);
 				}
 			}
 			else
 			{
 				if (ConfigManager.getInterval(kit) instanceof Integer)
 				{
-					if (ConfigManager.getTimeRemaining(player, kit) > 0)
-						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player, kit) + " seconds before using this Kit again!"));
+					if (ConfigManager.getTimeRemaining(player.getUniqueId(), kit) > 0)
+						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player.getUniqueId(), kit) + " seconds before using this Kit again!"));
 					else
 						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
 				}

@@ -1,5 +1,6 @@
 package io.github.hsyyid.kits;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.github.hsyyid.kits.cmds.KitAddExecutor;
 import io.github.hsyyid.kits.cmds.KitDeleteExecutor;
@@ -8,6 +9,7 @@ import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
 import io.github.hsyyid.kits.utils.ConfigManager;
+import io.github.hsyyid.kits.utils.Utils;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -26,15 +28,14 @@ import org.spongepowered.api.text.Text;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Plugin(id = "Kits", name = "Kits", version = "1.2")
+@Plugin(id = "Kits", name = "Kits", version = "1.3")
 public class Kits
 {
-	public static List<String> allKits = new ArrayList<String>();
+	public static List<String> allKits = Lists.newArrayList();
 	public static ItemStack.Builder itemBuilder;
 	public static ConfigurationNode config;
 	public static ConfigurationNode intervalConfig;
@@ -162,6 +163,8 @@ public class Kits
 			.build();
 
 		game.getCommandManager().register(this, kitsCommandSpec, "kits");
+		
+		Utils.restartTasks();
 
 		getLogger().info("-----------------------------");
 		getLogger().info("Kits was made by HassanS6000!");
