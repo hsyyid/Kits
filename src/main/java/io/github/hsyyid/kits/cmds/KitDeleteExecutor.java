@@ -50,7 +50,7 @@ public class KitDeleteExecutor implements CommandExecutor
 			System.out.println("[Kits]: Failed to remove kit " + name);
 			src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "The kit was not deleted successfully!"));
 		}
-		
+
 		src.sendMessage(Text.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The kit was deleted!"));
 		return CommandResult.success();
 	}

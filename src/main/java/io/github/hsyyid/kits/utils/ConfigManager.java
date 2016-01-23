@@ -62,17 +62,17 @@ public class ConfigManager
 	{
 		return Kits.config.getNode("players").getChildrenMap().keySet();
 	}
-	
+
 	public static Set<Object> getPlayerUsedKits(UUID uuid)
 	{
 		return Kits.config.getNode("players", uuid.toString()).getChildrenMap().keySet();
 	}
-	
+
 	public static void setTrue(UUID uuid, String kit)
 	{
 		ConfigurationLoader<CommentedConfigurationNode> configManager = Kits.getConfigManager();
 		Kits.config.getNode("players", uuid.toString(), kit, "usable").setValue(true);
-		
+
 		try
 		{
 			configManager.save(Kits.config);

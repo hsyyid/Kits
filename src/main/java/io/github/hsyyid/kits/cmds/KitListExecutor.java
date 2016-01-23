@@ -31,13 +31,12 @@ public class KitListExecutor implements CommandExecutor
 		{
 			if (src.hasPermission("kits.use." + name))
 			{
-				Text item = 
-					Text.builder(name)
-						.onClick(TextActions.runCommand("/kit " + name))
-						.onHover(TextActions.showText(Text.of(TextColors.WHITE, "Spawn kit ", TextColors.GOLD, name)))
-						.color(TextColors.DARK_AQUA)
-						.style(TextStyles.UNDERLINE)
-						.build();
+				Text item = Text.builder(name)
+					.onClick(TextActions.runCommand("/kit " + name))
+					.onHover(TextActions.showText(Text.of(TextColors.WHITE, "Spawn kit ", TextColors.GOLD, name)))
+					.color(TextColors.DARK_AQUA)
+					.style(TextStyles.UNDERLINE)
+					.build();
 
 				pList.add(item);
 			}

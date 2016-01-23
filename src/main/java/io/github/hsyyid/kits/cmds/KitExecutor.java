@@ -32,130 +32,214 @@ public class KitExecutor implements CommandExecutor
 
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException
 	{
-		if (src instanceof Player)
+		Optional<Player> target = args.<Player> getOne("target");
+
+		if (!target.isPresent())
 		{
-			final Player player = (Player) src;
+			if (src instanceof Player)
+			{
+				final Player player = (Player) src;
 
-			if (!ConfigManager.isPlayerInConfig(player.getUniqueId(), kit))
-				ConfigManager.addPlayerToConfig(player.getUniqueId(), kit);
+				if (!ConfigManager.isPlayerInConfig(player.getUniqueId(), kit))
+					ConfigManager.addPlayerToConfig(player.getUniqueId(), kit);
 
+				List<String> items = ConfigManager.getItems(kit);
+
+				if (items.size() == 0)
+				{
+					player.sendMessage(Text.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
+					return CommandResult.success();
+				}
+
+				if (ConfigManager.canUseKit(player.getUniqueId(), kit))
+				{
+					// Give Player their Kit
+					for (String i : items)
+					{
+						String id = i;
+						int quantity = 1;
+						int meta = -1;
+
+						if (id.contains(" "))
+						{
+							id = id.substring(0, id.indexOf(" "));
+							String substring = id.substring(id.indexOf(" ") + 1, id.length());
+
+							if (substring.contains(" "))
+							{
+								String quant = substring.substring(0, substring.indexOf(" "));
+
+								try
+								{
+									quantity = Integer.parseInt(quant);
+								}
+								catch (NumberFormatException e)
+								{
+									quantity = 1;
+								}
+
+								String met = substring.substring(substring.indexOf(" ") + 1, substring.length());
+
+								try
+								{
+									meta = Integer.parseInt(met);
+								}
+								catch (NumberFormatException e)
+								{
+									meta = -1;
+								}
+							}
+							else
+							{
+								try
+								{
+									quantity = Integer.parseInt(substring);
+								}
+								catch (NumberFormatException e)
+								{
+									quantity = 1;
+								}
+							}
+						}
+
+						Optional<ItemType> optionalItemType = Sponge.getRegistry().getType(ItemType.class, id);
+
+						if (optionalItemType.isPresent())
+						{
+							ItemStack stack = Sponge.getRegistry()
+								.createBuilder(ItemStack.Builder.class)
+								.itemType(optionalItemType.get())
+								.quantity(quantity)
+								.build();
+
+							if (meta == -1)
+							{
+								player.getInventory().offer(stack);
+							}
+							else
+							{
+								DataContainer container = stack.toContainer().set(DataQuery.of("UnsafeDamage"), meta);
+								stack = Sponge.getRegistry()
+									.createBuilder(ItemStack.Builder.class)
+									.fromContainer(container)
+									.build();
+								player.getInventory().offer(stack);
+							}
+						}
+					}
+
+					ConfigManager.setFalse(player.getUniqueId(), kit);
+
+					if (ConfigManager.getInterval(kit) instanceof Integer)
+					{
+						long val = (Integer) ConfigManager.getInterval(kit);
+						ConfigManager.setTimeRemaining(player.getUniqueId(), kit, val);
+						Utils.scheduleUpdateTask(player.getUniqueId(), kit);
+						Utils.scheduleValueChangeTask(player.getUniqueId(), kit, val);
+					}
+				}
+				else
+				{
+					if (ConfigManager.getInterval(kit) instanceof Integer)
+					{
+						if (ConfigManager.getTimeRemaining(player.getUniqueId(), kit) > 0)
+							src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player.getUniqueId(), kit) + " seconds before using this Kit again!"));
+						else
+							src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
+					}
+					else if (ConfigManager.getInterval(kit) instanceof Boolean)
+					{
+						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "This Kit is one-time use only!"));
+					}
+				}
+			}
+			else if (src instanceof ConsoleSource)
+			{
+				src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
+			}
+			else if (src instanceof CommandBlockSource)
+			{
+				src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
+			}
+		}
+		else if (src.hasPermission("kits.use.others"))
+		{
+			Player player = target.get();
 			List<String> items = ConfigManager.getItems(kit);
 
-			if (items.size() == 0)
+			for (String i : items)
 			{
-				player.sendMessage(Text.of(TextColors.RED, "Error: ", TextColors.DARK_RED, "The specified kit was not found, or there was an error retrieving data from it."));
-				return CommandResult.success();
-			}
+				String id = i;
+				int quantity = 1;
+				int meta = -1;
 
-			if (ConfigManager.canUseKit(player.getUniqueId(), kit))
-			{
-				// Give Player their Kit
-				for (String i : items)
+				if (id.contains(" "))
 				{
-					String id = i;
-					int quantity = 1;
-					int meta = -1;
+					id = id.substring(0, id.indexOf(" "));
+					String substring = id.substring(id.indexOf(" ") + 1, id.length());
 
-					if (id.contains(" "))
+					if (substring.contains(" "))
 					{
-						id = id.substring(0, id.indexOf(" "));
-						String substring = id.substring(id.indexOf(" ") + 1, id.length());
+						String quant = substring.substring(0, substring.indexOf(" "));
 
-						if (substring.contains(" "))
+						try
 						{
-							String quant = substring.substring(0, substring.indexOf(" "));
-							
-							try
-							{
-								quantity = Integer.parseInt(quant);
-							}
-							catch (NumberFormatException e)
-							{
-								quantity = 1;
-							}
-							
-							String met = substring.substring(substring.indexOf(" ") + 1, substring.length());
-							
-							try
-							{
-								meta = Integer.parseInt(met);
-							}
-							catch (NumberFormatException e)
-							{
-								meta = -1;
-							}
+							quantity = Integer.parseInt(quant);
 						}
-						else
+						catch (NumberFormatException e)
 						{
-							try
-							{
-								quantity = Integer.parseInt(substring);
-							}
-							catch (NumberFormatException e)
-							{
-								quantity = 1;
-							}
+							quantity = 1;
+						}
+
+						String met = substring.substring(substring.indexOf(" ") + 1, substring.length());
+
+						try
+						{
+							meta = Integer.parseInt(met);
+						}
+						catch (NumberFormatException e)
+						{
+							meta = -1;
 						}
 					}
-
-					Optional<ItemType> optionalItemType = Sponge.getRegistry().getType(ItemType.class, id);
-
-					if (optionalItemType.isPresent())
-					{
-						ItemStack stack = Sponge.getRegistry()
-							.createBuilder(ItemStack.Builder.class)
-							.itemType(optionalItemType.get())
-							.quantity(quantity)
-							.build();
-
-						if (meta == -1)
-						{
-							player.getInventory().offer(stack);
-						}
-						else
-						{
-							DataContainer container = stack.toContainer().set(DataQuery.of("UnsafeDamage"), meta);
-							stack = Sponge.getRegistry()
-								.createBuilder(ItemStack.Builder.class)
-								.fromContainer(container)
-								.build();
-							player.getInventory().offer(stack);
-						}
-					}
-				}
-
-				ConfigManager.setFalse(player.getUniqueId(), kit);
-
-				if (ConfigManager.getInterval(kit) instanceof Integer)
-				{
-					long val = (Integer) ConfigManager.getInterval(kit);
-					ConfigManager.setTimeRemaining(player.getUniqueId(), kit, val);
-					Utils.scheduleUpdateTask(player.getUniqueId(), kit);
-					Utils.scheduleValueChangeTask(player.getUniqueId(), kit, val);
-				}
-			}
-			else
-			{
-				if (ConfigManager.getInterval(kit) instanceof Integer)
-				{
-					if (ConfigManager.getTimeRemaining(player.getUniqueId(), kit) > 0)
-						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player.getUniqueId(), kit) + " seconds before using this Kit again!"));
 					else
-						src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
+					{
+						try
+						{
+							quantity = Integer.parseInt(substring);
+						}
+						catch (NumberFormatException e)
+						{
+							quantity = 1;
+						}
+					}
 				}
-				else if (ConfigManager.getInterval(kit) instanceof Boolean)
+
+				Optional<ItemType> optionalItemType = Sponge.getRegistry().getType(ItemType.class, id);
+
+				if (optionalItemType.isPresent())
 				{
-					src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "This Kit is one-time use only!"));
+					ItemStack stack = Sponge.getRegistry()
+						.createBuilder(ItemStack.Builder.class)
+						.itemType(optionalItemType.get())
+						.quantity(quantity)
+						.build();
+
+					if (meta == -1)
+					{
+						player.getInventory().offer(stack);
+					}
+					else
+					{
+						DataContainer container = stack.toContainer().set(DataQuery.of("UnsafeDamage"), meta);
+						stack = Sponge.getRegistry()
+							.createBuilder(ItemStack.Builder.class)
+							.fromContainer(container)
+							.build();
+						player.getInventory().offer(stack);
+					}
 				}
 			}
-		}
-		else if (src instanceof ConsoleSource)
-		{
-			src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
-		}
-		else if (src instanceof CommandBlockSource)
-		{
-			src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
 		}
 
 		return CommandResult.success();

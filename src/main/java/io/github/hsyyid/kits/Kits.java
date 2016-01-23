@@ -90,19 +90,20 @@ public class Kits
 		}
 
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
-		
+
 		List<String> kitList = ConfigManager.getKits();
-		
+
 		for (String k : kitList)
 		{
 			Kits.allKits.add(k);
 		}
-		
+
 		for (String k : kitList)
 		{
 			subcommands.put(Arrays.asList(k), CommandSpec.builder()
 				.permission("kits.use." + k)
 				.description(Text.of("Kit " + k))
+				.arguments(GenericArguments.optional(GenericArguments.player(Text.of("target"))))
 				.executor(new KitExecutor(k))
 				.build());
 		}
@@ -110,11 +111,7 @@ public class Kits
 		subcommands.put(Arrays.asList("add"), CommandSpec.builder()
 			.permission("kits.add")
 			.description(Text.of("Add a Kit or Item to a Kit"))
-			.arguments(GenericArguments.seq(
-				GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name"))),
-				GenericArguments.onlyOne(GenericArguments.string(Text.of("item")))),
-				GenericArguments.onlyOne(GenericArguments.integer(Text.of("number of items"))),
-				GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Text.of("item subtype")))))
+			.arguments(GenericArguments.seq(GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name"))), GenericArguments.onlyOne(GenericArguments.string(Text.of("item")))), GenericArguments.onlyOne(GenericArguments.integer(Text.of("number of items"))), GenericArguments.optional(GenericArguments.onlyOne(GenericArguments.integer(Text.of("item subtype")))))
 			.executor(new KitAddExecutor())
 			.extendedDescription(Text.of("To use /kit add please do /kit add <kit name> <item id>"))
 			.build());
@@ -122,11 +119,7 @@ public class Kits
 		subcommands.put(Arrays.asList("interval"), CommandSpec.builder()
 			.permission("kits.interval")
 			.description(Text.of("Change a Kit's Interval"))
-			.arguments(GenericArguments.seq(
-				GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name"))),
-				GenericArguments.firstParsing(
-					GenericArguments.onlyOne(GenericArguments.integer(Text.of("kit interval"))),
-					GenericArguments.onlyOne(GenericArguments.bool(Text.of("one-time"))))))
+			.arguments(GenericArguments.seq(GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name"))), GenericArguments.firstParsing(GenericArguments.onlyOne(GenericArguments.integer(Text.of("kit interval"))), GenericArguments.onlyOne(GenericArguments.bool(Text.of("one-time"))))))
 			.executor(new KitIntervalExecutor())
 			.extendedDescription(Text.of("To use /kit interval simply do /kit interval <kit name> <interval|one-time>"))
 			.build());
@@ -134,8 +127,7 @@ public class Kits
 		subcommands.put(Arrays.asList("delete"), CommandSpec.builder()
 			.permission("kits.delete")
 			.description(Text.of("Delete a Kit from the Config"))
-			.arguments(GenericArguments.seq(
-				GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name")))))
+			.arguments(GenericArguments.seq(GenericArguments.onlyOne(GenericArguments.string(Text.of("kit name")))))
 			.executor(new KitDeleteExecutor())
 			.extendedDescription(Text.of("To use /kit delete simply do /kit delete <kit name>"))
 			.build());
@@ -163,7 +155,7 @@ public class Kits
 			.build();
 
 		game.getCommandManager().register(this, kitsCommandSpec, "kits");
-		
+
 		Utils.restartTasks();
 
 		getLogger().info("-----------------------------");

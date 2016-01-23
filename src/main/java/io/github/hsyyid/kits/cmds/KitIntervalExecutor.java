@@ -16,26 +16,26 @@ public class KitIntervalExecutor implements CommandExecutor
 		String kitName = args.<String> getOne("kit name").get();
 		boolean oneTime = false;
 		int interval = 0;
-		
-		if(args.<Integer> getOne("kit interval").isPresent())
+
+		if (args.<Integer> getOne("kit interval").isPresent())
 		{
 			interval = args.<Integer> getOne("kit interval").get();
 		}
-		else if(args.<Boolean> getOne("one-time").isPresent())
+		else if (args.<Boolean> getOne("one-time").isPresent())
 		{
 			oneTime = true;
 		}
-		
+
 		// Sets the Interval
-		if(!oneTime)
+		if (!oneTime)
 		{
 			ConfigManager.setInterval(interval, kitName);
 		}
-		else if(oneTime)
+		else if (oneTime)
 		{
 			ConfigManager.setInterval(oneTime, kitName);
 		}
-		
+
 		src.sendMessage(Text.of(TextColors.GOLD, "Success! ", TextColors.YELLOW, "The interval was changed!"));
 		return CommandResult.success();
 	}
