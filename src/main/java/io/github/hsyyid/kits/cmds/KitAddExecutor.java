@@ -32,7 +32,7 @@ public class KitAddExecutor implements CommandExecutor
 		{
 			fullCmd = (item + " " + numberOfItem);
 		}
-
+		
 		if (items.size() > 0)
 		{
 			ConfigManager.addItemToKit(name, fullCmd);
