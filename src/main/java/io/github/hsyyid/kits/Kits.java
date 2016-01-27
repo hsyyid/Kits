@@ -8,38 +8,38 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
+import io.github.hsyyid.kits.config.KitsConfig;
+import io.github.hsyyid.kits.config.PlayerDataConfig;
 import io.github.hsyyid.kits.utils.ConfigManager;
 import io.github.hsyyid.kits.utils.Utils;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
-import org.spongepowered.api.GameRegistry;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.config.DefaultConfig;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Plugin(id = "Kits", name = "Kits", version = "1.3")
+@Plugin(id = "Kits", name = "Kits", version = "1.4")
 public class Kits
 {
+	protected Kits()
+	{
+		;
+	}
+
+	private static Kits kits;
 	public static List<String> allKits = Lists.newArrayList();
-	public static ItemStack.Builder itemBuilder;
-	public static ConfigurationNode config;
-	public static ConfigurationNode intervalConfig;
-	public static ConfigurationLoader<CommentedConfigurationNode> configurationManager;
 	public static Game game;
 
 	@Inject
@@ -51,43 +51,51 @@ public class Kits
 	}
 
 	@Inject
-	@DefaultConfig(sharedRoot = true)
-	private File defaultConfig;
+	@ConfigDir(sharedRoot = false)
+	private Path configDir;
 
-	@Inject
-	@DefaultConfig(sharedRoot = true)
-	private ConfigurationLoader<CommentedConfigurationNode> configManager;
+	public static Kits getKits()
+	{
+		return kits;
+	}
 
 	@Listener
 	public void onServerInit(GameInitializationEvent event)
 	{
 		getLogger().info("Kits loading...");
-
+		kits = this;
 		game = Sponge.getGame();
 
-		GameRegistry registry = game.getRegistry();
-		itemBuilder = registry.createBuilder(ItemStack.Builder.class);
-
 		// Config File
-		try
+		if (!Files.exists(configDir))
 		{
-			if (!defaultConfig.exists())
+			try
 			{
-				defaultConfig.createNewFile();
-				config = configManager.load();
-				config.getNode("kits", "kits").setValue("default,");
-				config.getNode("kits", "default", "item").setValue("diamond_axe,");
-				config.getNode("kits", "default", "interval").setValue(300);
-				configManager.save(config);
+				Files.createDirectories(configDir);
 			}
-			configurationManager = configManager;
-			config = configManager.load();
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 
-		}
-		catch (IOException exception)
+		// Create data Directory
+		if (!Files.exists(configDir.resolve("data")))
 		{
-			getLogger().error("The default configuration could not be loaded or created!");
+			try
+			{
+				Files.createDirectories(configDir.resolve("data"));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
+
+		// Create playerdata.conf
+		PlayerDataConfig.getConfig().setup();
+		// Create kits.conf
+		KitsConfig.getConfig().setup();
 
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
 
@@ -166,8 +174,8 @@ public class Kits
 		getLogger().info("Kits Loaded!");
 	}
 
-	public static ConfigurationLoader<CommentedConfigurationNode> getConfigManager()
+	public Path getConfigDir()
 	{
-		return configurationManager;
+		return configDir;
 	}
 }

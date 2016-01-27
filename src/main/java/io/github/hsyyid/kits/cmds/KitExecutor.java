@@ -106,24 +106,35 @@ public class KitExecutor implements CommandExecutor
 
 						if (optionalItemType.isPresent())
 						{
-							ItemStack stack = Sponge.getRegistry()
-								.createBuilder(ItemStack.Builder.class)
-								.itemType(optionalItemType.get())
-								.quantity(quantity)
-								.build();
-
-							if (meta == -1)
+							int c = 1;
+							
+							if (optionalItemType.get().getMaxStackQuantity() < quantity)
 							{
-								player.getInventory().offer(stack);
+								c = quantity;
+								quantity = 1;
 							}
-							else
+
+							for (int z = 0; z < c; z++)
 							{
-								DataContainer container = stack.toContainer().set(DataQuery.of("UnsafeDamage"), meta);
-								stack = Sponge.getRegistry()
+								ItemStack stack = Sponge.getRegistry()
 									.createBuilder(ItemStack.Builder.class)
-									.fromContainer(container)
+									.itemType(optionalItemType.get())
+									.quantity(quantity)
 									.build();
-								player.getInventory().offer(stack);
+
+								if (meta == -1)
+								{
+									player.getInventory().offer(stack);
+								}
+								else
+								{
+									DataContainer container = stack.toContainer().set(DataQuery.of("UnsafeDamage"), meta);
+									stack = Sponge.getRegistry()
+										.createBuilder(ItemStack.Builder.class)
+										.fromContainer(container)
+										.build();
+									player.getInventory().offer(stack);
+								}
 							}
 						}
 					}
