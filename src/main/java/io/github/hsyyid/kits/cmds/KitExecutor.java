@@ -64,7 +64,7 @@ public class KitExecutor implements CommandExecutor
 					if (ConfigManager.getInterval(kit) instanceof Integer)
 					{
 						if (ConfigManager.getTimeRemaining(player.getUniqueId(), kit) > 0)
-							src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player.getUniqueId(), kit) + " seconds before using this Kit again!"));
+							src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait " + ConfigManager.getTimeRemaining(player.getUniqueId(), kit) + " " + ConfigManager.getTimeUnit().name().toLowerCase() + " before using this Kit again!"));
 						else
 							src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You must wait before using this Kit again!"));
 					}
@@ -74,11 +74,7 @@ public class KitExecutor implements CommandExecutor
 					}
 				}
 			}
-			else if (src instanceof ConsoleSource)
-			{
-				src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
-			}
-			else if (src instanceof CommandBlockSource)
+			else
 			{
 				src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
 			}
