@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class Utils
 {
@@ -25,7 +24,7 @@ public class Utils
 				if (ConfigManager.getTimeRemaining(uuid, kit) > 0)
 					ConfigManager.setTimeRemaining(uuid, kit, ConfigManager.getTimeRemaining(uuid, kit) - 1);
 			}
-		}).interval(1, TimeUnit.SECONDS).name("Kits - Counts remaining time for " + uuid).submit(Sponge.getPluginManager().getPlugin("Kits").get().getInstance().get());
+		}).interval(1, ConfigManager.getTimeUnit()).name("Kits - Counts remaining time for " + uuid).submit(Sponge.getPluginManager().getPlugin("Kits").get().getInstance().get());
 	}
 
 	public static void scheduleValueChangeTask(final UUID uuid, final String kit, long delay)
@@ -42,7 +41,7 @@ public class Utils
 					task.cancel();
 				}
 			}
-		}).delay(delay, TimeUnit.SECONDS).name("Kits - Sets Value Back to True for " + uuid).submit(Sponge.getPluginManager().getPlugin("Kits").get().getInstance().get());
+		}).delay(delay, ConfigManager.getTimeUnit()).name("Kits - Sets Value Back to True for " + uuid).submit(Sponge.getPluginManager().getPlugin("Kits").get().getInstance().get());
 	}
 
 	public static void restartTasks()
@@ -70,7 +69,6 @@ public class Utils
 			}
 		}
 	}
-	
 
 	public static void givePlayerKit(Player player, List<String> items)
 	{
@@ -85,11 +83,11 @@ public class Utils
 			{
 				String substring = id.substring(id.indexOf(" ") + 1, id.length());
 				id = id.substring(0, id.indexOf(" "));
-				
+
 				if (substring.contains(" "))
 				{
 					String quant = substring.substring(0, substring.indexOf(" "));
-					
+
 					try
 					{
 						quantity = Integer.parseInt(quant);
@@ -128,13 +126,13 @@ public class Utils
 			if (optionalItemType.isPresent())
 			{
 				int c = 1;
-				
+
 				if (quantity > optionalItemType.get().getMaxStackQuantity())
 				{
 					c = quantity;
 					quantity = 1;
 				}
-				
+
 				for (int z = 0; z < c; z++)
 				{
 					ItemStack stack = Sponge.getRegistry()

@@ -1,6 +1,7 @@
 package io.github.hsyyid.kits.utils;
 
 import com.google.common.collect.Lists;
+import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.Configs;
 import io.github.hsyyid.kits.config.Configurable;
 import io.github.hsyyid.kits.config.KitsConfig;
@@ -10,26 +11,30 @@ import ninja.leaping.configurate.ConfigurationNode;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class ConfigManager
 {
+	private static Configurable config = Config.getConfig();
 	private static Configurable playerConfig = PlayerDataConfig.getConfig();
 	private static Configurable kitsConfig = KitsConfig.getConfig();
 
 	public static List<String> getKits()
 	{
-		// Get Kit Names
 		ConfigurationNode kits = Configs.getConfig(kitsConfig).getNode("kits", "kits");
-		String kit = kits.getString("default");
 
+		if (kits.getValue() == null)
+			return Lists.newArrayList();
+
+		String kit = kits.getString("default");
 		boolean finished = false;
-		// Array List to Keep all the Kits in
 		List<String> kitList = Lists.newArrayList();
 
 		// Add all kits to kitList
 		if (finished != true)
 		{
 			int endIndex = kit.indexOf(",");
+
 			if (endIndex != -1)
 			{
 				String substring = kit.substring(0, endIndex);
@@ -206,6 +211,13 @@ public class ConfigManager
 		}
 
 		return val;
+	}
+
+	public static TimeUnit getTimeUnit()
+	{
+		ConfigurationNode valueNode = Configs.getConfig(config).getNode((Object[]) ("kits.interval.units").split("\\."));
+		String timeUnit = valueNode.getString();
+		return TimeUnit.valueOf(timeUnit);
 	}
 
 	public static void setInterval(Object interval, String kitName)

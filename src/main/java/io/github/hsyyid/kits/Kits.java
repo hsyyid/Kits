@@ -8,6 +8,7 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
+import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.KitsConfig;
 import io.github.hsyyid.kits.config.PlayerDataConfig;
 import io.github.hsyyid.kits.utils.ConfigManager;
@@ -92,6 +93,8 @@ public class Kits
 			}
 		}
 
+		// Create config.conf
+		Config.getConfig().setup();
 		// Create playerdata.conf
 		PlayerDataConfig.getConfig().setup();
 		// Create kits.conf
