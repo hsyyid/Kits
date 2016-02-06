@@ -13,6 +13,7 @@ import io.github.hsyyid.kits.config.KitsConfig;
 import io.github.hsyyid.kits.config.PlayerDataConfig;
 import io.github.hsyyid.kits.utils.ConfigManager;
 import io.github.hsyyid.kits.utils.Utils;
+import me.flibio.updatifier.Updatifier;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
@@ -31,7 +32,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Plugin(id = "Kits", name = "Kits", version = "1.4")
+@Updatifier(repoName = "Kits", repoOwner = "hsyyid", version = "v" + PluginInfo.VERSION)
+@Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, dependencies = PluginInfo.DEPENDENCIES)
 public class Kits
 {
 	protected Kits()

@@ -1,5 +1,6 @@
 package io.github.hsyyid.kits.cmds;
 
+import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.KitsConfig;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -13,6 +14,7 @@ public class KitReloadExecutor implements CommandExecutor
 {
 	public CommandResult execute(CommandSource src, CommandContext arg1) throws CommandException
 	{
+		Config.getConfig().load();
 		KitsConfig.getConfig().load();
 		src.sendMessage(Text.of(TextColors.GREEN, "Success: ", TextColors.YELLOW, "The config was reloaded."));
 		return CommandResult.success();
