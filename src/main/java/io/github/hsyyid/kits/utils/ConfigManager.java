@@ -9,6 +9,7 @@ import io.github.hsyyid.kits.config.PlayerDataConfig;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -228,5 +229,24 @@ public class ConfigManager
 	public static void addPlayerToConfig(UUID uuid, String kit)
 	{
 		Configs.setValue(playerConfig, new Object[] { "players", uuid.toString(), kit, "usable" }, true);
+	}
+
+	public static Optional<String> getDefaultKit()
+	{
+		ConfigurationNode valueNode = Configs.getConfig(config).getNode((Object[]) ("kits.default.kit").split("\\."));
+
+		if (valueNode.getValue() != null && !valueNode.getString().equals(""))
+		{
+			return Optional.of(valueNode.getString());
+		}
+		else if (valueNode.getValue() == null)
+		{
+			Configs.setValue(config, valueNode.getPath(), "default");
+			return Optional.of("default");
+		}
+		else
+		{
+			return Optional.empty();
+		}
 	}
 }

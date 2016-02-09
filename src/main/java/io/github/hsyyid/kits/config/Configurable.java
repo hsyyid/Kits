@@ -5,15 +5,15 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 /**
  * Template used for all config files
  */
-public interface Configurable {
+public interface Configurable
+{
+	void setup();
 
-    void setup();
+	void load();
 
-    void load();
+	void save();
 
-    void save();
+	void populate();
 
-    void populate();
-
-    CommentedConfigurationNode get();
+	CommentedConfigurationNode get();
 }
