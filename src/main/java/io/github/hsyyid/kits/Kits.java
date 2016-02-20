@@ -8,6 +8,7 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
+import io.github.hsyyid.kits.config.BookConfig;
 import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.KitsConfig;
 import io.github.hsyyid.kits.config.PlayerDataConfig;
@@ -102,6 +103,8 @@ public class Kits
 		PlayerDataConfig.getConfig().setup();
 		// Create kits.conf
 		KitsConfig.getConfig().setup();
+		// Create book.conf
+		BookConfig.getConfig().setup();
 
 		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
 

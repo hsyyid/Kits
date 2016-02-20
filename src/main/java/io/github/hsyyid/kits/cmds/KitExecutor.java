@@ -74,7 +74,7 @@ public class KitExecutor implements CommandExecutor
 			}
 			else
 			{
-				src.sendMessage(Text.of("Must be an in-game player to use /kit!"));
+				src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "Must be an in-game player to use /kit!"));
 			}
 		}
 		else if (src.hasPermission("kits.use.others"))
@@ -82,6 +82,10 @@ public class KitExecutor implements CommandExecutor
 			Player player = target.get();
 			List<String> items = ConfigManager.getItems(kit);
 			Utils.givePlayerKit(player, items);
+		}
+		else
+		{
+			src.sendMessage(Text.of(TextColors.DARK_RED, "Error! ", TextColors.RED, "You do not have permission to give other players kits!"));
 		}
 
 		return CommandResult.success();

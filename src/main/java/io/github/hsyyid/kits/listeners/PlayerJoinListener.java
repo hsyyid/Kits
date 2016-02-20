@@ -15,14 +15,16 @@ public class PlayerJoinListener
 	{
 		Optional<JoinData> optionalJoinData = event.getTargetEntity().getOrCreate(JoinData.class);
 
-		if(optionalJoinData.isPresent())
+		if (optionalJoinData.isPresent())
 		{
 			JoinData joinData = optionalJoinData.get();
 
-			if(joinData.lastPlayed().equals(joinData.firstPlayed()))
+			if (joinData.lastPlayed().get().equals(joinData.firstPlayed().get()))
 			{
-				if(ConfigManager.getDefaultKit().isPresent())
+				if (ConfigManager.getDefaultKit().isPresent())
 					Utils.givePlayerKit(event.getTargetEntity(), ConfigManager.getItems(ConfigManager.getDefaultKit().get()));
+
+				Utils.givePlayerBook(event.getTargetEntity());
 			}
 		}
 	}

@@ -1,12 +1,16 @@
 package io.github.hsyyid.kits.utils;
 
 import com.google.common.collect.Lists;
+import io.github.hsyyid.kits.config.BookConfig;
 import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.Configs;
 import io.github.hsyyid.kits.config.Configurable;
 import io.github.hsyyid.kits.config.KitsConfig;
 import io.github.hsyyid.kits.config.PlayerDataConfig;
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +23,7 @@ public class ConfigManager
 	private static Configurable config = Config.getConfig();
 	private static Configurable playerConfig = PlayerDataConfig.getConfig();
 	private static Configurable kitsConfig = KitsConfig.getConfig();
+	private static Configurable bookConfig = BookConfig.getConfig();
 
 	public static List<String> getKits()
 	{
@@ -248,5 +253,29 @@ public class ConfigManager
 		{
 			return Optional.empty();
 		}
+	}
+
+	public static Text getBookTitle()
+	{
+		return TextSerializers.FORMATTING_CODE.deserialize(Configs.getConfig(bookConfig).getNode((Object[]) ("book.title").split("\\.")).getString());
+	}
+
+	public static Text getBookAuthor()
+	{
+		return TextSerializers.FORMATTING_CODE.deserialize(Configs.getConfig(bookConfig).getNode((Object[]) ("book.author").split("\\.")).getString());
+	}
+
+	public static List<Text> getBookPages()
+	{
+		List<Text> pages = Lists.newArrayList();
+		CommentedConfigurationNode valueNode = Configs.getConfig(bookConfig).getNode("book", "pages");
+
+		for (Object page : valueNode.getChildrenMap().keySet())
+		{
+			String pageString = Configs.getConfig(bookConfig).getNode("book", "pages", String.valueOf(page)).getString();
+			pages.add(TextSerializers.FORMATTING_CODE.deserialize(pageString));
+		}
+
+		return pages;
 	}
 }
