@@ -24,7 +24,8 @@ public class PlayerJoinListener
 				if (ConfigManager.getDefaultKit().isPresent())
 					Utils.givePlayerKit(event.getTargetEntity(), ConfigManager.getItems(ConfigManager.getDefaultKit().get()));
 
-				Utils.givePlayerBook(event.getTargetEntity());
+				if (ConfigManager.isBookEnabled())
+					Utils.givePlayerBook(event.getTargetEntity());
 			}
 		}
 	}

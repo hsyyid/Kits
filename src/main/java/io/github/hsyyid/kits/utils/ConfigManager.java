@@ -153,6 +153,21 @@ public class ConfigManager
 			return node.getDouble();
 	}
 
+	public static boolean isBookEnabled()
+	{
+		ConfigurationNode node = Configs.getConfig(playerConfig).getNode("kits", "firstjoin", "book");
+
+		if (node.getValue() != null)
+		{
+			return node.getBoolean();
+		}
+		else
+		{
+			Configs.setValue(playerConfig, node.getPath(), true);
+			return true;
+		}
+	}
+
 	public static void setTimeRemaining(UUID uuid, String kit, double timeRemaining)
 	{
 		Configs.setValue(playerConfig, new Object[] { "players", uuid.toString(), kit, "time" }, timeRemaining);

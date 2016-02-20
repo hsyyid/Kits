@@ -85,6 +85,7 @@ public class Config implements Configurable
 	{
 		get().getNode("kits", "interval", "units").setValue("SECONDS").setComment("The unit for Kit intervals. Supports DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS, etc.");
 		get().getNode("kits", "default", "kit").setValue("default").setComment("The default kit given to every player on first join. Leave as empty to not have one.");
+		get().getNode("kits", "firstjoin", "book").setValue(true).setComment("Toggles giving player the book defined in book.conf.");
 	}
 
 	@Override
