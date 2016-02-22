@@ -155,7 +155,7 @@ public class ConfigManager
 
 	public static boolean isBookEnabled()
 	{
-		ConfigurationNode node = Configs.getConfig(playerConfig).getNode("kits", "firstjoin", "book");
+		ConfigurationNode node = Configs.getConfig(config).getNode("kits", "firstjoin", "book");
 
 		if (node.getValue() != null)
 		{
@@ -163,7 +163,7 @@ public class ConfigManager
 		}
 		else
 		{
-			Configs.setValue(playerConfig, node.getPath(), true);
+			Configs.setValue(config, node.getPath(), true);
 			return true;
 		}
 	}
