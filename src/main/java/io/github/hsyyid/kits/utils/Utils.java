@@ -1,5 +1,6 @@
 package io.github.hsyyid.kits.utils;
 
+import io.github.hsyyid.kits.PluginInfo;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -26,7 +27,7 @@ public class Utils
 				if (ConfigManager.getTimeRemaining(uuid, kit) > 0)
 					ConfigManager.setTimeRemaining(uuid, kit, ConfigManager.getTimeRemaining(uuid, kit) - 1);
 			}
-		}).interval(1, ConfigManager.getTimeUnit()).name("Kits - Counts remaining time for " + uuid).submit(Sponge.getPluginManager().getPlugin("Kits").get().getInstance().get());
+		}).interval(1, ConfigManager.getTimeUnit()).name("Kits - Counts remaining time for " + uuid).submit(Sponge.getPluginManager().getPlugin(PluginInfo.ID).get().getInstance().get());
 	}
 
 	public static void scheduleValueChangeTask(final UUID uuid, final String kit, long delay)
@@ -43,7 +44,7 @@ public class Utils
 					task.cancel();
 				}
 			}
-		}).delay(delay, ConfigManager.getTimeUnit()).name("Kits - Sets Value Back to True for " + uuid).submit(Sponge.getPluginManager().getPlugin("Kits").get().getInstance().get());
+		}).delay(delay, ConfigManager.getTimeUnit()).name("Kits - Sets Value Back to True for " + uuid).submit(Sponge.getPluginManager().getPlugin(PluginInfo.ID).get().getInstance().get());
 	}
 
 	public static void restartTasks()
