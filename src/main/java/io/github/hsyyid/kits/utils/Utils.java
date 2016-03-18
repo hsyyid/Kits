@@ -82,9 +82,9 @@ public class Utils
 			int quantity = 1;
 			int meta = -1;
 			
-			if (id.startsWith("execute_cmd:"){
+			if (id.startsWith("execute_cmd:")){
 				String cmd = id.split(":")[1];
-				if (!cmd.startsWith("/"){
+				if (!cmd.startsWith("/")){
 					cmd = "/"+cmd;
 				}
 				Sponge.getGame().getCommandManager().process(Sponge.getServer().getConsole(), cmd);
