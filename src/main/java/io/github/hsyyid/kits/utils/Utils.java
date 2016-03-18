@@ -87,7 +87,7 @@ public class Utils
 				if (!cmd.startsWith("/")){
 					cmd = "/"+cmd;
 				}
-				Sponge.getGame().getCommandManager().process(Sponge.getServer().getConsole(), cmd.replace ("@p", Player.getName()));
+				Sponge.getGame().getCommandManager().process(Sponge.getServer().getConsole(), cmd.replace("@p", Player.getName()));
 				continue;
 			}
 
