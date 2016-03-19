@@ -12,7 +12,9 @@ import io.github.hsyyid.kits.config.BookConfig;
 import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.KitsConfig;
 import io.github.hsyyid.kits.config.PlayerDataConfig;
+import io.github.hsyyid.kits.listeners.PlayerInteractBlockListener;
 import io.github.hsyyid.kits.listeners.PlayerJoinListener;
+import io.github.hsyyid.kits.listeners.SignChangeListener;
 import io.github.hsyyid.kits.utils.ConfigManager;
 import io.github.hsyyid.kits.utils.Utils;
 import me.flibio.updatifier.Updatifier;
@@ -177,6 +179,8 @@ public class Kits
 		Utils.restartTasks();
 
 		Sponge.getEventManager().registerListeners(this, new PlayerJoinListener());
+		Sponge.getEventManager().registerListeners(this, new SignChangeListener());
+		Sponge.getEventManager().registerListeners(this, new PlayerInteractBlockListener());
 
 		getLogger().info("-----------------------------");
 		getLogger().info("Kits was made by HassanS6000!");
