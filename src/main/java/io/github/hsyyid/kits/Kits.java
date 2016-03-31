@@ -1,6 +1,7 @@
 package io.github.hsyyid.kits;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import io.github.hsyyid.kits.cmds.KitAddExecutor;
 import io.github.hsyyid.kits.cmds.KitDeleteExecutor;
@@ -26,6 +27,8 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
@@ -36,6 +39,8 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Updatifier(repoName = "Kits", repoOwner = "hsyyid", version = "v" + PluginInfo.VERSION)
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, description = PluginInfo.DESCRIPTION, dependencies = @Dependency(id = "Updatifier", version = "1.0", optional = true) )
@@ -48,6 +53,7 @@ public class Kits
 
 	private static Kits kits;
 	public static List<String> allKits = Lists.newArrayList();
+	public static Map<UUID, Map<String, Double>> remainingTime = Maps.newHashMap();
 	public static Game game;
 
 	@Inject
@@ -188,6 +194,18 @@ public class Kits
 		getLogger().info("Have fun, and enjoy your Kits! :D");
 		getLogger().info("-----------------------------");
 		getLogger().info("Kits Loaded!");
+	}
+	
+	@Listener
+	public void onServerStarted(GameStartedServerEvent event)
+	{
+		ConfigManager.readTimeRemaining();
+	}
+	
+	@Listener
+	public void onServerStopped(GameStoppedEvent event)
+	{
+		ConfigManager.saveTimeRemainingToConf();
 	}
 
 	public Path getConfigDir()

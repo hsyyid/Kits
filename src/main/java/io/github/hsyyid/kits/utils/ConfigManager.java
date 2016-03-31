@@ -1,6 +1,8 @@
 package io.github.hsyyid.kits.utils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import io.github.hsyyid.kits.Kits;
 import io.github.hsyyid.kits.config.BookConfig;
 import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.Configs;
@@ -13,6 +15,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -145,12 +148,41 @@ public class ConfigManager
 
 	public static double getTimeRemaining(UUID uuid, String kit)
 	{
-		ConfigurationNode node = Configs.getConfig(playerConfig).getNode("players", uuid.toString(), kit, "time");
+		if (Kits.remainingTime.containsKey(uuid))
+		{
+			Map<String, Double> remainingTimes = Kits.remainingTime.get(uuid);
 
-		if (node.getValue() == null)
-			return 0;
-		else
-			return node.getDouble();
+			if (remainingTimes.containsKey(kit))
+			{
+				return remainingTimes.get(kit);
+			}
+		}
+
+		return 0;
+	}
+
+	public static void readTimeRemaining()
+	{
+		Kits.remainingTime.clear();
+
+		CommentedConfigurationNode node = Configs.getConfig(playerConfig).getNode("players");
+
+		for (Object player : node.getChildrenMap().keySet())
+		{
+			UUID uuid = UUID.fromString(String.valueOf(player));
+			CommentedConfigurationNode kitNode = Configs.getConfig(playerConfig).getNode("players", uuid.toString());
+
+			for (Object kit : kitNode.getChildrenMap().keySet())
+			{
+				String kitName = String.valueOf(kit);
+				CommentedConfigurationNode timeNode = Configs.getConfig(playerConfig).getNode("players", uuid.toString(), kitName, "time");
+
+				if (timeNode.getValue() != null)
+				{
+					ConfigManager.setTimeRemaining(uuid, kitName, timeNode.getDouble());
+				}
+			}
+		}
 	}
 
 	public static boolean isBookEnabled()
@@ -170,7 +202,32 @@ public class ConfigManager
 
 	public static void setTimeRemaining(UUID uuid, String kit, double timeRemaining)
 	{
-		Configs.setValue(playerConfig, new Object[] { "players", uuid.toString(), kit, "time" }, timeRemaining);
+		if (!Kits.remainingTime.containsKey(uuid))
+		{
+			Map<String, Double> map = Maps.newHashMap();
+			map.put(kit, timeRemaining);
+			Kits.remainingTime.put(uuid, map);
+		}
+		else
+		{
+			if (Kits.remainingTime.get(uuid).containsKey(kit))
+			{
+				Kits.remainingTime.get(uuid).remove(kit);
+			}
+
+			Kits.remainingTime.get(uuid).put(kit, timeRemaining);
+		}
+	}
+
+	public static void saveTimeRemainingToConf()
+	{
+		for (UUID uuid : Kits.remainingTime.keySet())
+		{
+			for (String kit : Kits.remainingTime.get(uuid).keySet())
+			{
+				Configs.setValue(playerConfig, new Object[] { "players", uuid.toString(), kit, "time" }, Kits.remainingTime.get(uuid).get(kit));
+			}
+		}
 	}
 
 	public static void addItemToKit(String kitName, String item)
