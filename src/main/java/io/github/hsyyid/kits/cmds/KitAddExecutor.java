@@ -22,7 +22,7 @@ public class KitAddExecutor implements CommandExecutor
 		Optional<Integer> subtype = args.<Integer> getOne("item subtype");
 
 		List<String> items = ConfigManager.getItems(name);
-		String fullCmd = "";
+		String fullCmd;
 
 		if (subtype.isPresent())
 		{

@@ -232,7 +232,7 @@ public class ConfigManager
 
 	public static void addItemToKit(String kitName, String item)
 	{
-		ConfigurationNode valueNode = Configs.getConfig(playerConfig).getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
+		ConfigurationNode valueNode = Configs.getConfig(kitsConfig).getNode((Object[]) ("kits." + kitName + ".item").split("\\."));
 		String items = valueNode.getString();
 		String formattedItem = (item + ",");
 		Configs.setValue(kitsConfig, valueNode.getPath(), (items + formattedItem));
