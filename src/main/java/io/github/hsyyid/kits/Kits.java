@@ -9,6 +9,7 @@ import io.github.hsyyid.kits.cmds.KitExecutor;
 import io.github.hsyyid.kits.cmds.KitIntervalExecutor;
 import io.github.hsyyid.kits.cmds.KitListExecutor;
 import io.github.hsyyid.kits.cmds.KitReloadExecutor;
+import io.github.hsyyid.kits.cmds.KitResetExecutor;
 import io.github.hsyyid.kits.config.BookConfig;
 import io.github.hsyyid.kits.config.Config;
 import io.github.hsyyid.kits.config.KitsConfig;
@@ -162,6 +163,13 @@ public class Kits
 			.description(Text.of("Reload the Kits Config"))
 			.executor(new KitReloadExecutor())
 			.extendedDescription(Text.of("To reload the config, simply do /kit reload"))
+			.build());
+		
+		subcommands.put(Arrays.asList("reset"), CommandSpec.builder()
+			.permission("kits.reset")
+			.description(Text.of("Reset the Kit Player Times"))
+			.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("kit"))))
+			.executor(new KitResetExecutor())
 			.build());
 
 		CommandSpec kitCommandSpec = CommandSpec.builder()

@@ -316,14 +316,10 @@ public class ConfigManager
 		{
 			return Optional.of(valueNode.getString());
 		}
-		else if (valueNode.getValue() == null)
+		else
 		{
 			Configs.setValue(config, valueNode.getPath(), "default");
 			return Optional.of("default");
-		}
-		else
-		{
-			return Optional.empty();
 		}
 	}
 
