@@ -205,7 +205,7 @@ public class Kits
 	}
 
 	@Listener
-	public void onServerStopped(GameStoppedEvent event)
+	public void onServerStopped(GameStoppingEvent event)
 	{
 		ConfigManager.saveTimeRemainingToConf();
 	}
