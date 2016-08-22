@@ -28,7 +28,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GameStoppedEvent;
+import org.spongepowered.api.event.game.state.GameStoppingEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
@@ -205,7 +205,7 @@ public class Kits
 	}
 
 	@Listener
-	public void onServerStopped(GameStoppedEvent event)
+	public void onServerStopped(GameStoppingEvent event)
 	{
 		ConfigManager.saveTimeRemainingToConf();
 	}
