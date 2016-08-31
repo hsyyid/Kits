@@ -81,6 +81,15 @@ public class Utils
 			String id = i;
 			int quantity = 1;
 			int meta = -1;
+			
+			if (id.startsWith("execute_cmd:")){
+				String cmd = id.split(":")[1];
+				if (!cmd.startsWith("/")){
+					cmd = "/"+cmd;
+				}
+				Sponge.getGame().getCommandManager().process(Sponge.getServer().getConsole(), cmd.replaceAll("@p", player.getName()));
+				continue;
+			}
 
 			if (id.contains(" "))
 			{
